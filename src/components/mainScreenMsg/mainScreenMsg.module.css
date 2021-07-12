@@ -1,0 +1,36 @@
+.Main{
+  padding: 50px;
+}
+.chatBlock{
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  align-items: baseline;
+  height: 100%;
+}
+.messagesList{
+  width: 100%;
+  min-height: 550px;
+}
+.messagesList p {
+  margin: 10px 20px;
+}
+.messagesList .myMessage{
+  text-align: left;
+  margin-right:auto;
+}
+.messagesList .opponentMessage{
+  text-align: right;
+  margin-left:auto;
+}
+
+.controlElementsChat{
+  margin: 0 auto;
+  max-width: 400px;
+  display: flex;
+  justify-content: center;
+}
+#sendMessageBtn{
+  margin-left: 20px;
+}

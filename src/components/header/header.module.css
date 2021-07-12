@@ -1,0 +1,38 @@
+header{
+    display: block;
+    background: black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    padding: 0px 30px;
+}
+
+.UserBlock span{
+    padding-left: 10px;
+}
+.LogoBlock{
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.menuItem{
+    cursor: pointer;
+    margin: 0px 20px;
+    transition: 0.2s ease-in-out;
+}
+.menuItem:last-child{
+    margin: 0;
+}
+.menuItem:hover{
+    transition: 0.2s ease-in-out;
+    border-bottom: 2px solid white;
+    margin-top: -5px;
+}
+.menu{
+    max-width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: nowrap;
+}
+

@@ -1,0 +1,19 @@
+.navbar{
+width: 20%;
+height: 100%;
+background: rgb(231, 40, 40);
+}
+.menuItemStyle{
+    transition: 0.2s ease-in-out;
+    font-weight: normal;
+
+    cursor: pointer;
+    font-size: 15px;
+    color: white;
+    text-transform: uppercase;
+    margin: 20px;
+}
+.menuItemStyle:hover{
+    transition: 0.2s ease-in-out;
+    font-weight: bold;
+}
