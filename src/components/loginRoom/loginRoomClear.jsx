@@ -1,6 +1,5 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import LoginRoomStyle from './loginRoom.module.css';
-import { CHANGE_USER_NAME } from '../actions/actions.types'
 
 function LoginRoomClear(props) {
     return (
@@ -15,6 +14,7 @@ function LoginRoomClear(props) {
                         className={LoginRoomStyle.inputs}
                         onChange= {props.changedUsernameField}
                         value = {props.username}
+                        onKeyPress = {props.enterKeyPressed}
                     />
                     <label htmlFor="roomIdInput" className={LoginRoomStyle.labels}>Enter room id</label>
                     <input
@@ -23,7 +23,9 @@ function LoginRoomClear(props) {
                         id="roomIdInput"
                         className={LoginRoomStyle.inputs}
                         onChange = {props.changedLoginRoomIdField}
-                        value = {props.RoomId} />
+                        value = {props.roomID}
+                        onKeyPress = {props.enterKeyPressed}
+                         />
                     <button
                         type="button"
                         className={LoginRoomStyle.loginBtn}

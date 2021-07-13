@@ -9,12 +9,12 @@ import MessagesContainer from '../mainScreenMsg/MessagesContainer';
 import LoginRoomContainer from '../loginRoom/loginRoomContainer';
 
 function MainComponent(props) {
-    console.log(props);
     return (
             <div className="container">
                 <Header
                     dispatch={props.dispatch}
                     username={props.store.manyPages.username}
+                    roomID = {props.store.manyPages.roomID}
                 />
                 <div className="content">
                     <Navbar

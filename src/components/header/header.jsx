@@ -5,13 +5,16 @@ import HeadStyle from './header.module.css';
 import { NavLink } from 'react-router-dom';
 
 function Header(props) {
+
+    const [username, setUsername] = React.useState(props.username);
+
     return (
         <div className="header-block">
             <header className={HeadStyle.header}>
                 <div className={HeadStyle.UserBlock}>
                     <FontAwesomeIcon icon={faUser} />
-
-                    <span>Hello, {props.username}!</span>
+                    <span>Hello, {username}!</span>
+                    <span>Your room: {props.roomID}</span>
                 </div>
                 <div className={HeadStyle.LogoBlock}>Anonymous chat</div>
                 <div className={HeadStyle.MenuBlock}>

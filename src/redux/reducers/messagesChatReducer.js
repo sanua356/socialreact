@@ -68,6 +68,7 @@ export const messagesReducer = (state = initialState, action) => {
                 return stateCopy;
             } else {
                 console.log('Message is empty!');
+                return state;
             }
         case actionsNames.CHANGE_TEXTAREA_MESSAGE:
             stateCopy = {...state};

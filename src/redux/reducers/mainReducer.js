@@ -4,8 +4,8 @@ const actionsNames = {
 
 const initialState = {
     username: 'username',
-    roomId: '',
-    isLoggined: 'false'
+    roomID: 'corolina',
+    isLoggined: 'true'
 }
 
 export function SAVE_ROOMID_AND_USERNAME_LOCALSTORAGE_AC () {
@@ -18,18 +18,16 @@ export const mainReducer = (state = initialState, action) => {
     let stateCopy = {...state};
     switch (action.type) {
         case actionsNames.SAVE_ROOMID_AND_USERNAME_LOCALSTORAGE_AC:
-            if (localStorage.getItem("username")) {
+            if (localStorage.getItem("username") !== null && localStorage.getItem("roomID") !== null) {
                 stateCopy.username = localStorage.getItem('username');
-                stateCopy.roomId = localStorage.getItem('roomID');
+                stateCopy.roomID = localStorage.getItem('roomID');
                 stateCopy.isLoggined = true;
             }else{
                 stateCopy.isLoggined = false;
             }
-        console.log(stateCopy);
-        return {
+        return { 
             ...stateCopy
         }
-
         default:
             return state;
     }
