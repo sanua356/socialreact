@@ -4,7 +4,7 @@ import MainScrMsg from "./mainScreenMsgClear";
 import MainScrMsgStyle from './mainScreenMsg.module.css';
 import { connect } from 'react-redux';
 
-function roleMessage(serverDataStyleMessage) {
+function messageSenderStyle(serverDataStyleMessage) {
     if (serverDataStyleMessage === 'myMessage') {
         return MainScrMsgStyle.myMessage;
     } else {
@@ -29,7 +29,7 @@ const mapDispatchToProps = (dispatch) =>{
             }
         },
         roleMessage: (serverDataStyleMessage) =>{
-            roleMessage(serverDataStyleMessage);
+            return messageSenderStyle(serverDataStyleMessage);
         },
         messageTextareaChanged: (data) =>{
             dispatch(CHANGE_TEXTAREA_MESSAGE(data.target.value));
