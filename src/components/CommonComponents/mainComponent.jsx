@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../header/header';
+import HeaderContainer from '../header/headerContainer';
 import Navbar from '../navbar/navbar';
 import Footer from '../footer/footer';
 import Profile from '../profile/Profile';
@@ -11,19 +11,14 @@ import LoginRoomContainer from '../loginRoom/loginRoomContainer';
 function MainComponent(props) {
     return (
             <div className="container">
-                <Header
-                    dispatch={props.dispatch}
-                    username={props.store.manyPages.username}
-                    roomID = {props.store.manyPages.roomID}
+                <HeaderContainer
                 />
                 <div className="content">
                     <Navbar
-                        dispatch={props.dispatch}
                         sidebarMenuItems={props.store.sidebarPage.sidebarMenuItems}
                     />
                     <Route exact path="/profile" >
                         <Profile
-                            dispatch={props.dispatch}
                             username={props.store.manyPages.username}
                         />
                     </Route>

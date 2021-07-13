@@ -2,7 +2,6 @@ import React from 'react';
 import MainScrMsg from './mainScreenMsg.module.css';
 
 function MainScreenMessages(props) {
-    console.log(props);
     //get array messages from file with map
     const mappedMessagesArray = props.messagesList.map((message) =>
         <p
