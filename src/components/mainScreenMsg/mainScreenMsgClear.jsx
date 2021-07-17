@@ -1,24 +1,21 @@
 import React from 'react';
 import MainScrMsg from './mainScreenMsg.module.css';
+import { useEffect } from "react";
 
 function MainScreenMessages(props) {
     //get array messages from file with map
-    const mappedMessagesArray = props.messagesList.map((message) =>
-        <p
-            key={props.messagesList.indexOf(message)}
-            className={props.roleMessage(message.classRendering)}
-        >
-            {message.sender}: {message.messageText}
-        </p >
-    );
-    //send new message from database
+
+    useEffect(() => {
+        props.getMessagesFromServer(props.roomID);
+    }, []) //get messages from server API 
+    const messages = props.getMessagesUIMap(props.messagesList, props.errors, props.myUsername);
     //render component
     return (
         <div className="workspace">
             <main className={MainScrMsg.Main}>
                 <div className={MainScrMsg.chatBlock}>
                     <div className={MainScrMsg.messagesList}>
-                        {mappedMessagesArray}{/* render all messages from mapped array */}
+                        {messages}{/* render all messages from mapped array */}
                     </div>
                     <div className={MainScrMsg.controlElementsChat}>
                         <textarea name="newMessage"

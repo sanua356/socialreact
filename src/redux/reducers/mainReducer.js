@@ -5,7 +5,7 @@ const actionsNames = {
 const initialState = {
     username: 'username',
     roomID: 'corolina',
-    isLoggined: 'true'
+    isLoggined: true
 }
 
 export function SAVE_ROOMID_AND_USERNAME_LOCALSTORAGE_AC () {
