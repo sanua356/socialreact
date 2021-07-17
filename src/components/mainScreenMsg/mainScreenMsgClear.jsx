@@ -1,15 +1,19 @@
 import React from 'react';
 import MainScrMsg from './mainScreenMsg.module.css';
 import { useEffect } from "react";
+import Loader from './../CommonComponents/Loader/Loader';
 
 function MainScreenMessages(props) {
     //get array messages from file with map
-
+    
     useEffect(() => {
-        props.getMessagesFromServer(props.roomID);
+        props.getMessagesFromServer(props.roomID, props.isLoading);
     }, []) //get messages from server API 
+
     const messages = props.getMessagesUIMap(props.messagesList, props.errors, props.myUsername);
+    const sendNewMessage = () => props.sendNewMessage(props.errors, props.myUsername, props.roomID);
     //render component
+render
     return (
         <div className="workspace">
             <main className={MainScrMsg.Main}>
@@ -29,7 +33,7 @@ function MainScreenMessages(props) {
                         <button
                             type="button"
                             id={MainScrMsg.sendMessageBtn}
-                            onClick={props.sendNewMessage}>Send Message</button>
+                            onClick={sendNewMessage}>Send Message</button>
                     </div>
                 </div>
             </main>
