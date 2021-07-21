@@ -1,26 +1,37 @@
-.loginroomBlock{
-    padding: 20px 50px;
-    background: white;
-    margin: 0 auto;
+.loginroomBlock {
+  padding: 20px 50px;
+  background: white;
+  margin: 0 auto;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.form{
-        height: 100%;
-        text-align: left;
-        justify-content: center;
-        align-items: center;
-        display: flex;
-        flex-direction: column;
+.form {
+  width: 350px;
+  border: 1px solid black;
+  text-align: left;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
-.labels{
-    margin-top: 20px;
+.labels {
+  margin-top: 20px;
 }
-.inputs{
-    padding: 10px;
-    font-size: 20px;
-    margin: 5px 0px;
+.inputs {
+  padding: 10px;
+  font-size: 20px;
+  margin: 5px 0px;
 }
-.loginBtn{
-    margin-top: 20px;
-    padding: 5px 30px;
-    font-size: 20px;
+.loginBtn {
+  margin-top: 20px;
+  margin-bottom: 30px;
+  padding: 5px 30px;
+  font-size: 20px;
+}
+
+.error {
+  color: red;
 }

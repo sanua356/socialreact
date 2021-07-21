@@ -1,33 +1,28 @@
 import React from 'react';
 import MainScrMsg from './mainScreenMsg.module.css';
-import { useEffect } from "react";
-import Loader from './../CommonComponents/Loader/Loader';
+import LoaderGif from '../../assets/Loader/loaderGif.gif';
 
-function MainScreenMessages(props) {
-    //get array messages from file with map
-    
-    useEffect(() => {
-        props.getMessagesFromServer(props.roomID, props.isLoading);
-    }, []) //get messages from server API 
+function MessagesClear(props){
+    const messages = props.getMessagesUIMap(props.messagesList, props.errors, props.myUsername, props.roomIsExists);
+    const sendNewMessage = () => props.sendNewMessage(props.errors, props.myUsername, props.roomID, props.changedTextareaMessage);
+    const handleKeyPress = (event) =>  event.key === "Enter" ? sendNewMessage() : null;
 
-    const messages = props.getMessagesUIMap(props.messagesList, props.errors, props.myUsername);
-    const sendNewMessage = () => props.sendNewMessage(props.errors, props.myUsername, props.roomID);
-    //render component
-render
     return (
         <div className="workspace">
+            <img src={LoaderGif} alt="Loader" style={{display: 'none'}} />
             <main className={MainScrMsg.Main}>
                 <div className={MainScrMsg.chatBlock}>
                     <div className={MainScrMsg.messagesList}>
                         {messages}{/* render all messages from mapped array */}
                     </div>
                     <div className={MainScrMsg.controlElementsChat}>
+                        <span className = {MainScrMsg.errors}>{props.errors}</span>
                         <textarea name="newMessage"
                             cols="50"
                             rows="2"
                             placeholder="Enter new message"
                             style={{ resize: 'none' }}
-                            onKeyPress={props.enterKeyPressed}
+                            onKeyPress={handleKeyPress}
                             onChange={props.messageTextareaChanged}
                             value={props.changedTextareaMessage} />
                         <button
@@ -41,4 +36,4 @@ render
     );
 }
 
-export default MainScreenMessages;
+export default MessagesClear;

@@ -12,6 +12,8 @@
 .messagesList {
   width: 100%;
   min-height: 550px;
+  max-height: 551px;
+  overflow: scroll;
 }
 .messagesList p {
   margin: 10px 20px;
@@ -33,4 +35,7 @@
 }
 #sendMessageBtn {
   margin-left: 20px;
+}
+.errors {
+  color: red;
 }

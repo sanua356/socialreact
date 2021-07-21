@@ -1,12 +1,12 @@
 import React from 'react';
-import HeaderContainer from '../header/headerContainer';
-import Navbar from '../navbar/navbar';
-import Footer from '../footer/footer';
+import HeaderContainer from '../Header/HeaderContainer';
+import Navbar from '../navbar/Navbar';
+import Footer from '../Footer/Footer';
 import Profile from '../profile/Profile';
 import { Route, Redirect } from 'react-router-dom';
-import Updates from './../updates/Updates';
-import MessagesContainer from '../mainScreenMsg/MessagesContainer';
-import LoginRoomContainer from '../loginRoom/loginRoomContainer';
+import Updates from '../updates/Updates';
+import MessagesContainer from '../MainScreenMsg/MessagesContainer';
+import Logout from '../Logout/Logout';
 
 function MainComponent(props) {
     return (
@@ -27,15 +27,11 @@ function MainComponent(props) {
                         <Updates />
                     </Route>
 
-                    <Route exact path="/messages" >
+                    <Route path="/messages/:roomid?" >
                         <MessagesContainer />
                     </Route>
                     <Route exact path="/logout">
-                        {localStorage.clear()}
-                        <Redirect to="/login" />
-                    </Route>
-                    <Route exact path ="/login">
-                        <LoginRoomContainer />
+                        <Logout />
                     </Route>
                     <Redirect exact from="/" to="/messages" />
                 </div>

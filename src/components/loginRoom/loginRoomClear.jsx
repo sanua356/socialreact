@@ -13,7 +13,7 @@ function LoginRoomClear(props) {
                         id="usernameInput"
                         className={LoginRoomStyle.inputs}
                         onChange= {props.changedUsernameField}
-                        value = {props.username}
+                        value = {props.usernameChanged}
                         onKeyPress = {props.enterKeyPressed}
                     />
                     <label htmlFor="roomIdInput" className={LoginRoomStyle.labels}>Enter room id</label>
@@ -23,14 +23,16 @@ function LoginRoomClear(props) {
                         id="roomIdInput"
                         className={LoginRoomStyle.inputs}
                         onChange = {props.changedLoginRoomIdField}
-                        value = {props.roomID}
+                        value = {props.roomIDChanged}
                         onKeyPress = {props.enterKeyPressed}
                          />
+                         <span className={LoginRoomStyle.error}>{props.errorsValidation}</span>
                     <button
+                        disabled = {!props.logginingBtnClickableStatus}
                         type="button"
                         className={LoginRoomStyle.loginBtn}
                         onClick = {props.sendDataFields}
-                    >Login</button>
+                    >{props.loginBtnName}</button>
                 </form>
             </div>   
     );
