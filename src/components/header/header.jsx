@@ -14,7 +14,11 @@ function Header(props) {
                     <span>Hello, {props.username}!</span>
                     <span>Your room: {props.roomID}</span>
                 </div>
-                <div className={HeadStyle.LogoBlock}>Anonymous chat</div>
+                <div className={HeadStyle.LogoBlock}>
+                    <a href = "/messages">
+                         Anonymous chat
+                    </a>
+                </div>
                 <div className={HeadStyle.MenuBlock}>
                     <nav>
                         <ul className={HeadStyle.menu}>

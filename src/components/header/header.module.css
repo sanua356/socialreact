@@ -15,12 +15,10 @@ header {
   font-weight: bold;
 }
 .menuItem {
+  border-bottom: 2px solid transparent;
   cursor: pointer;
   margin: 0px 20px;
   transition: 0.2s ease-in-out;
-}
-.menuItem:last-child {
-  margin: 0;
 }
 .menuItem:hover {
   transition: 0.2s ease-in-out;

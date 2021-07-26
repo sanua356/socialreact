@@ -14,6 +14,7 @@
   min-height: 550px;
   max-height: 551px;
   overflow: scroll;
+  overflow-x: hidden;
 }
 .messagesList p {
   margin: 10px 20px;
