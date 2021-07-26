@@ -8,8 +8,9 @@ import Updates from '../updates/Updates';
 import MessagesContainer from '../MainScreenMsg/MessagesContainer';
 import Logout from '../Logout/Logout';
 
-function MainComponent(props) {
+function MainComponent(props) { //Компонент, который рендерится если пользователь залогинился в комнату
     return (
+        <div className="mainScreen">
             <div className="container">
                 <HeaderContainer
                 />
@@ -33,10 +34,10 @@ function MainComponent(props) {
                     <Route exact path="/logout">
                         <Logout />
                     </Route>
-                    <Redirect exact from="/" to="/messages" />
+                    <Redirect exact from="/" to="/messages" />{/*Редирект на страницу сообщений, если пользователь ввёл ссылку-белиберду*/}
                 </div>
-                <Footer />
             </div>
+        </div>
     );
 }
 

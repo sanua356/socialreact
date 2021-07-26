@@ -8,7 +8,7 @@ const mapStateToProps = (state) =>{
         myUsername: state.manyPages.username,
         roomID: state.manyPages.roomID,
         isLoading: state.messagesPage.isLoading,
-        roomIsExists: state.manyPages.roomIsExists
+        roomIsExists: state.manyPages.roomIsExists,
     }
 }
 const mapDispatchToProps = (dispatch) =>{

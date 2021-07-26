@@ -4,7 +4,6 @@ import MainComponent from "../CommonComponents/MainComponent";
 import LoginRoomContainer from '../LoginRoom/LoginRoomContainer';
 
 function LogginingRouter(props){
-    console.log(props);
     return(
         <>
         {props.roomIsExists ? <MainComponent store={props.store} /> : <LoginRoomContainer />}

@@ -51,14 +51,16 @@ export function ADD_ERROR_MESSAGE_АС(error) {
 const initialState = {
   messagesList: [], //Массив списка сообщений, полученных с сервера для вывода в UI
   changedTextareaMessage: "", //Временная переменная для хранения значения из textarea ввода сообщения
+  messagesEmptyStatusRoom: false, //Переменная, которая ставится в true, если с сервера пришла пустая комната без сообщений
   errors: "", //Переменная для вывода ошибок ввода на экран (если они возникают)
   isLoading: false, //Флаг показа GIF с Loader, пока выполняется запрос к серверу
 };
 
 export const messagesReducer = (state = initialState, action) => {
+  let stateCopy = { ...state };
   switch (action.type) {
     case actionsNames.ADD_NEW_MESSAGE_FROM_DATA_BASE: //Если АС = отправка сообщения к БД
-      let stateCopy = { ...state, messagesList: [...state.messagesList] };
+      stateCopy = { ...state, messagesList: [...state.messagesList] };
       if (!stateCopy.errors) {
         //Если нет ошибок ввода
         if (stateCopy.changedTextareaMessage) {
@@ -72,6 +74,7 @@ export const messagesReducer = (state = initialState, action) => {
           stateCopy.messagesList.push(newMessage); //push в массив сообщений
           stateCopy.changedTextareaMessage = ""; //Очистка textarea с вводом сообщения
           console.log("Message sended");
+          stateCopy.messagesEmptyStatusRoom = false;
           return stateCopy;
         } else {
           //Если поле ввода сообщений пусто
@@ -88,6 +91,7 @@ export const messagesReducer = (state = initialState, action) => {
       stateCopy = { ...state, ...state.messagesList };
       stateCopy.messagesList = []; //Очистить список старых сообщений (если они вообще есть)
       stateCopy.errors = ""; //Очистить список ошибок (если они вообще есть)
+      stateCopy.messagesEmptyStatusRoom = false;
       if (action.messagesJSON !== null) {
         //Если сообщения с сервера пришли (То есть если они вообще есть на сервере по введённому RoomID)
         if (action.messagesJSON !== "No messages") {
@@ -97,11 +101,11 @@ export const messagesReducer = (state = initialState, action) => {
           }
         } else {
           //Если сообщений не пришло (сервер вернул ответ, что сообщений нет)
-          stateCopy.errors = "No saved messages from room.";
+          stateCopy.messagesEmptyStatusRoom = true;
         }
       } else {
         //Если сообщений не пришло (косяк в коде)
-        stateCopy.errors = "No saved messages from room.";
+        stateCopy.errors = true;
       }
       return stateCopy;
     case actionsNames.CHANGE_LOADING_STATUS: //Если АС = изменить статус показа Loader на экране
@@ -150,7 +154,9 @@ export const getMessagesFromServerTC = (roomID, roomIsExists) => {
           console.log(error);
         });
     } else {
-      dispatch(ADD_ERROR_MESSAGE_АС("No saved messages from room as room not exist"));
+      dispatch(
+        ADD_ERROR_MESSAGE_АС("No saved messages from room as room not exist")
+      );
     }
   };
 };

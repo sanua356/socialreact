@@ -12,11 +12,11 @@ function MessagesClear(props){
             <img src={LoaderGif} alt="Loader" style={{display: 'none'}} />
             <main className={MainScrMsg.Main}>
                 <div className={MainScrMsg.chatBlock}>
+                    {props.messagesEmptyStatus ? <span className = {MainScrMsg.errors}>No saved messages from room.</span> : null}
                     <div className={MainScrMsg.messagesList}>
                         {messages}{/* render all messages from mapped array */}
                     </div>
                     <div className={MainScrMsg.controlElementsChat}>
-                        <span className = {MainScrMsg.errors}>{props.errors}</span>
                         <textarea name="newMessage"
                             cols="50"
                             rows="2"

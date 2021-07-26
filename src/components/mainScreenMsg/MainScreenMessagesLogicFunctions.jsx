@@ -4,9 +4,8 @@ import Loader from '../CommonComponents/Loader/Loader';
 import MainScreenMsgClear from "./MainScreenMsgClear";
 import { connect } from 'react-redux';
 import MainScrMsgStyle from './mainScreenMsg.module.css';
-import { ADD_NEW_MESSAGE_FROM_DATA_BASE_AC, CHANGE_LOADING_STATUS_AC, CHANGE_TEXTAREA_MESSAGE_AC} from '../../redux/reducers/messagesChatReducer';
+import { CHANGE_LOADING_STATUS_AC, CHANGE_TEXTAREA_MESSAGE_AC, addNewMessageFromServerTC} from '../../redux/reducers/messagesChatReducer';
 import { withRouter } from 'react-router-dom';
-import { addNewMessageFromServerTC } from './../../redux/reducers/messagesChatReducer';
 
 function MainScreenMessagesLogicComponent(props) {
     //get array messages from file with map
@@ -54,7 +53,7 @@ const mapStateToProps = (state) =>{
         errors: state.messagesPage.errors,
         isLoading: state.messagesPage.isLoading,
         roomIsExists: state.manyPages.roomIsExists,
-        lastMessage: state.messagesPage.lastMessage
+        messagesEmptyStatus: state.messagesPage.messagesEmptyStatusRoom
     }
 }
 const mapDispatchToProps = (dispatch) =>{

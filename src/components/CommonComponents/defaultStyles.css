@@ -7,11 +7,18 @@ html {
   margin: 0;
   box-sizing: border-box;
 }
+.mainScreen {
+  width: 100vw;
+  height: 100vh;
+  background: url(../../assets//LoginRoom/9.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
 .container {
   width: 1400px;
   height: 100%;
   margin: 0 auto;
-  background-color: gray;
 }
 .content {
   width: 100%;
