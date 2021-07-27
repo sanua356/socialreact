@@ -4,7 +4,7 @@ import Loader from '../CommonComponents/Loader/Loader';
 import MainScreenMsgClear from "./MainScreenMsgClear";
 import { connect } from 'react-redux';
 import MainScrMsgStyle from './mainScreenMsg.module.css';
-import { CHANGE_LOADING_STATUS_AC, CHANGE_TEXTAREA_MESSAGE_AC, addNewMessageFromServerTC} from '../../redux/reducers/messagesChatReducer';
+import { CHANGE_LOADING_STATUS_AC, addNewMessageFromServerTC} from '../../redux/reducers/messagesChatReducer';
 import { withRouter } from 'react-router-dom';
 
 function MainScreenMessagesLogicComponent(props) {
@@ -59,13 +59,10 @@ const mapStateToProps = (state) =>{
 const mapDispatchToProps = (dispatch) =>{
     return{
         sendNewMessage: (errors, myUsername, roomID, message) => {
-            dispatch(addNewMessageFromServerTC(roomID, myUsername, message, errors));
+            dispatch(addNewMessageFromServerTC(errors, myUsername, roomID, message));
         },
         roleMessage: (usernameSenderMessage, myUsername) =>{
             return messageSenderStyle(usernameSenderMessage, myUsername);
-        },
-        messageTextareaChanged: (data) =>{
-            dispatch(CHANGE_TEXTAREA_MESSAGE_AC(data.target.value));
         },
         getMessagesUIMap: (messagesList, errors, myUsername) => {
             return getMessagesUIMap(messagesList, errors, myUsername);

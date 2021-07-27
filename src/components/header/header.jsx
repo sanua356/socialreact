@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faDoorOpen } from '@fortawesome/free-solid-svg-icons';
 import HeadStyle from './header.module.css';
 import { NavLink } from 'react-router-dom';
 
@@ -23,6 +23,7 @@ function Header(props) {
                     <nav>
                         <ul className={HeadStyle.menu}>
                             <NavLink to="/logout">
+                                <FontAwesomeIcon icon={faDoorOpen} />
                                 <li className={HeadStyle.menuItem} >Logout Chat</li>
                             </NavLink>
                         </ul>

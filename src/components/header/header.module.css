@@ -14,6 +14,11 @@ header {
   text-transform: uppercase;
   font-weight: bold;
 }
+.menu a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .menuItem {
   border-bottom: 2px solid transparent;
   cursor: pointer;

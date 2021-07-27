@@ -9,6 +9,7 @@ const mapStateToProps = (state) =>{
         roomID: state.manyPages.roomID,
         isLoading: state.messagesPage.isLoading,
         roomIsExists: state.manyPages.roomIsExists,
+        errors: state.messagesPage.errors
     }
 }
 const mapDispatchToProps = (dispatch) =>{

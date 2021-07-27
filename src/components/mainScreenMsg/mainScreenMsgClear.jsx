@@ -1,11 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import MainScrMsg from './mainScreenMsg.module.css';
 import LoaderGif from '../../assets/Loader/loaderGif.gif';
+import MainScreenMsgInputForm from './MainScreenMsgInputForm';
 
 function MessagesClear(props){
     const messages = props.getMessagesUIMap(props.messagesList, props.errors, props.myUsername, props.roomIsExists);
-    const sendNewMessage = () => props.sendNewMessage(props.errors, props.myUsername, props.roomID, props.changedTextareaMessage);
-    const handleKeyPress = (event) =>  event.key === "Enter" ? sendNewMessage() : null;
+    //const handleKeyPress = (event) =>  event.key === "Enter" ? sendNewMessage() : null;
+
+    const chatScreen = React.createRef();
+    useEffect(() => {
+        console.log("CHAT RERENDERED");
+
+    }, [props.messagesList])
 
     return (
         <div className="workspace">
@@ -13,23 +19,17 @@ function MessagesClear(props){
             <main className={MainScrMsg.Main}>
                 <div className={MainScrMsg.chatBlock}>
                     {props.messagesEmptyStatus ? <span className = {MainScrMsg.errors}>No saved messages from room.</span> : null}
-                    <div className={MainScrMsg.messagesList}>
+                    <div className={MainScrMsg.messagesList} ref ={chatScreen}>
                         {messages}{/* render all messages from mapped array */}
                     </div>
-                    <div className={MainScrMsg.controlElementsChat}>
-                        <textarea name="newMessage"
-                            cols="50"
-                            rows="2"
-                            placeholder="Enter new message"
-                            style={{ resize: 'none' }}
-                            onKeyPress={handleKeyPress}
-                            onChange={props.messageTextareaChanged}
-                            value={props.changedTextareaMessage} />
-                        <button
-                            type="button"
-                            id={MainScrMsg.sendMessageBtn}
-                            onClick={sendNewMessage}>Send Message</button>
-                    </div>
+                    <hr />
+                    <MainScreenMsgInputForm 
+                    roomID = {props.roomID}
+                    username = {props.myUsername}
+                    errors = {props.errors}
+                    sendNewMessage = {props.sendNewMessage}
+                    //handleKeyPress = {handleKeyPress}
+                    />
                 </div>
             </main>
         </div>

@@ -2,29 +2,29 @@ import { messagesAPI } from "../../APIrequests/api"; //Импорт обьект
 const actionsNames = {
   //Обьект с константами для вызова Action Creater
   ADD_NEW_MESSAGE_FROM_DATA_BASE: "ADD_NEW_MESSAGE_FROM_DATA_BASE",
-  CHANGE_TEXTAREA_MESSAGE: "CHANGE_TEXTAREA_MESSAGE",
   GET_MESSAGES_LIST_FROM_API: "GET_MESSAGES_LIST_FROM_API",
   CHANGE_LOADING_STATUS: "CHANGE_LOADING_STATUS",
   ADD_ERROR_MESSAGE: "ADD_ERROR_MESSAGE",
 };
 
-export function ADD_NEW_MESSAGE_FROM_DATA_BASE_AC(errors, username, roomID) {
+export function ADD_NEW_MESSAGE_FROM_DATA_BASE_AC(
+  errors,
+  username,
+  roomID,
+  message,
+  messageID
+) {
   //AC, возникающий при клике на кнопку "Send message" (или нажатие Enter) на странице чата
   return {
     type: "ADD_NEW_MESSAGE_FROM_DATA_BASE",
     errors,
     username,
     roomID,
+    message,
+    messageID,
   };
 }
 
-export function CHANGE_TEXTAREA_MESSAGE_AC(message) {
-  //АС, который вызывается при взаимодействии с textarea ввода сообщения на странице сообщений
-  return {
-    type: "CHANGE_TEXTAREA_MESSAGE",
-    messageData: message,
-  };
-}
 export function GET_MESSAGES_LIST_FROM_API_АС(roomID, messages, errors) {
   //АС, который вызывается при переходе на страницу /messages для получения списка сообщений с сервера
   return {
@@ -50,7 +50,6 @@ export function ADD_ERROR_MESSAGE_АС(error) {
 }
 const initialState = {
   messagesList: [], //Массив списка сообщений, полученных с сервера для вывода в UI
-  changedTextareaMessage: "", //Временная переменная для хранения значения из textarea ввода сообщения
   messagesEmptyStatusRoom: false, //Переменная, которая ставится в true, если с сервера пришла пустая комната без сообщений
   errors: "", //Переменная для вывода ошибок ввода на экран (если они возникают)
   isLoading: false, //Флаг показа GIF с Loader, пока выполняется запрос к серверу
@@ -60,33 +59,29 @@ export const messagesReducer = (state = initialState, action) => {
   let stateCopy = { ...state };
   switch (action.type) {
     case actionsNames.ADD_NEW_MESSAGE_FROM_DATA_BASE: //Если АС = отправка сообщения к БД
+      console.log(action);
       stateCopy = { ...state, messagesList: [...state.messagesList] };
-      if (!stateCopy.errors) {
-        //Если нет ошибок ввода
-        if (stateCopy.changedTextareaMessage) {
-          //Если поле ввода сообщений не пусто
-          const newMessage = {
-            //Формирует обьект с новым сообщением и push его в массив сообщений state
-            dateTimeMessage: Date.now(),
-            messageSender: action.username,
-            message: stateCopy.changedTextareaMessage,
-          };
-          stateCopy.messagesList.push(newMessage); //push в массив сообщений
-          stateCopy.changedTextareaMessage = ""; //Очистка textarea с вводом сообщения
-          console.log("Message sended");
-          stateCopy.messagesEmptyStatusRoom = false;
-          return stateCopy;
-        } else {
-          //Если поле ввода сообщений пусто
-          console.log("Message is empty!");
-          return state;
-        }
+      //Если нет ошибок ввода
+      if (action.message) {
+        //Если поле ввода сообщений не пусто
+        const newMessage = {
+          //Формирует обьект с новым сообщением и push его в массив сообщений state
+          id: action.messageID,
+          dateTimeMessage: Date.now(),
+          messageSender: action.username,
+          message: action.message,
+        };
+        stateCopy.messagesList.push(newMessage); //push в массив сообщений
+        console.log("Message sended");
+        stateCopy.messagesEmptyStatusRoom = false;
+        console.log(stateCopy.messagesList);
+        return stateCopy;
+      } else {
+        //Если поле ввода сообщений пусто
+        stateCopy.errors = "Message is empty";
+        console.log("Message is empty!");
+        return stateCopy;
       }
-      return stateCopy;
-    case actionsNames.CHANGE_TEXTAREA_MESSAGE: //Если АС = изменилось поле ввода сообщения (textarea)
-      stateCopy = { ...state };
-      stateCopy.changedTextareaMessage = action.messageData; //Обновить state новым значением из textarea
-      return stateCopy;
     case actionsNames.GET_MESSAGES_LIST_FROM_API: //Если АС = получить список сообщений с сервера по введённой roomID
       stateCopy = { ...state, ...state.messagesList };
       stateCopy.messagesList = []; //Очистить список старых сообщений (если они вообще есть)
@@ -124,15 +119,24 @@ export const messagesReducer = (state = initialState, action) => {
 
 export const addNewMessageFromServerTC = (
   //Thunk creator, посылающий запрос к API с отправкой нового сообщения на сервер
-  roomID,
+  errors,
   myUsername,
-  message,
-  errors
+  roomID,
+  message
 ) => {
-  console.log(roomID, myUsername, message, errors);
   return (dispatch) => {
-    messagesAPI.addNewMessageFromServer(roomID, myUsername, message); //Отправить запрос с данными сообщения на сервер
-    dispatch(ADD_NEW_MESSAGE_FROM_DATA_BASE_AC(errors, myUsername, roomID)); //Добавить сообщение в локальный state
+    messagesAPI.addNewMessageFromServer(roomID, myUsername, message).then(
+      (response) =>
+        dispatch(
+          ADD_NEW_MESSAGE_FROM_DATA_BASE_AC(
+            errors,
+            myUsername,
+            roomID,
+            message,
+            response
+          )
+        ) //Добавить сообщение в локальный state); //Отправить запрос с данными сообщения на сервер
+    );
   };
 };
 
