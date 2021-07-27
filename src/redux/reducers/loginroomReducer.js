@@ -8,13 +8,13 @@ const actionsNames = {
   CHANGE_NAME_STATUS_LOGGINING_BTN: "CHANGE_NAME_STATUS_LOGGINING_BTN",
   CHANGE_ROOM_IS_EXISIS_SERVER_RESPONSE:
     "CHANGE_ROOM_IS_EXISIS_SERVER_RESPONSE",
+  CHANGE_CREATE_OR_LOGIN_STATUS: "CHANGE_CREATE_OR_LOGIN_STATUS",
 };
 
 export function SEND_LOGINROOM_DATA_AC(
   usernameFieldValue,
   usernameSecretKeyFieldValue,
-  roomIDFieldValue,
-  validationCheckErrors
+  roomIDFieldValue
 ) {
   //АС, который вызывается при клике на кнопку "Login" на странице логина
   return {
@@ -22,7 +22,6 @@ export function SEND_LOGINROOM_DATA_AC(
     usernameFieldValue,
     usernameSecretKeyFieldValue,
     roomIDFieldValue,
-    validationCheckErrors,
   };
 }
 
@@ -41,10 +40,17 @@ export function CHANGE_ROOM_IS_EXISIS_SERVER_RESPONSE_AC(messageServerData) {
     messageServerData,
   };
 }
+export function CHANGE_CREATE_OR_LOGIN_STATUS_AC(status) {
+  return {
+    type: "CHANGE_CREATE_OR_LOGIN_STATUS",
+    status,
+  };
+}
 
 const initialState = {
   changedUsername: "", //Временная переменная, хранящая строку из input ввода ника
   changedRoomID: "", //Временная переменная, хранящая строку из input ввода RoomID
+  changedSecretKeyUsername: "", //Временная переменная, хранящая секретный ключ ника пользователя
   notCorrectValidationData: "", //Временная переменная, хранящая строку при возникновении ошибок ввода (валидации) введённых данных в inputs
   loginBtnName: "Login", //Переменная, хранящая текст внутри кнопки логина (нужна для вывода сообщения "Loggining...") во время ожидания ответа запроса к БД
   loginBtnClickableStatus: true, //Переменная для отключения кнопки, во время ожиданеия ответа от сервера к БД
@@ -57,14 +63,15 @@ export const loginroomReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionsNames.SEND_LOGINROOM_DATA: //Экшн, отвечающий за сохранение данных ника и RoomID в LocalStorage
       localStorage.clear(); //Почистить хранилище от старых значений (если они есть) ника и RoomID
-      if (action.validationCheckErrors) {
-        //Если нет ошибок валидации
-        localStorage.setItem("username", action.usernameFieldValue); //Сохранить в хранилище ник
-        localStorage.setItem("roomID", action.roomIDFieldValue); //Сохранить в хранилище RoomID
-        stateCopy.notCorrectValidationData = ""; //Очистить поле ошибок валидации
-        stateCopy.usernameFieldValue = ""; //Очистить input ника на странице валидации
-        stateCopy.roomIDFieldValue = ""; //Очистить input RoomID на странице валидации
-      }
+      localStorage.setItem("username", action.usernameFieldValue); //Сохранить в хранилище ник
+      localStorage.setItem("roomID", action.roomIDFieldValue); //Сохранить в хранилище RoomID
+      localStorage.setItem(
+        "secretKeyUsername",
+        action.usernameSecretKeyFieldValue
+      ); //Сохранить секретный ключ ника в хранлище
+      stateCopy.notCorrectValidationData = ""; //Очистить поле ошибок валидации
+      stateCopy.usernameFieldValue = ""; //Очистить input ника на странице валидации
+      stateCopy.roomIDFieldValue = ""; //Очистить input RoomID на странице валидации
       return stateCopy;
     case actionsNames.CHANGE_NAME_STATUS_LOGGINING_BTN: //Экшн, меняющий статус кнопки (отключение/включение), пока нет ответа на запрос от сервера
       stateCopy = { ...state };
@@ -78,6 +85,10 @@ export const loginroomReducer = (state = initialState, action) => {
       } else {
         stateCopy.roomIsExistsServerResponse = action.messageServerData;
       }
+      return stateCopy;
+    case actionsNames.CHANGE_CREATE_OR_LOGIN_STATUS:
+      stateCopy = { ...state };
+      stateCopy.createOrLoginStatus = action.status;
       return stateCopy;
     default:
       return state;
@@ -111,5 +122,34 @@ export const checkRoomExistsTC = () => {
         //Если есть косяки при отправке запроса, вывести их на экран
         console.log(error);
       });
+  };
+};
+
+export const createNewRoomTC = (status) => {
+  return (dispatch) => {
+    if (status) {
+      dispatch(CHANGE_NAME_STATUS_LOGGINING_BTN_AC("Creating..."), false); //Отключить кнопку логина на время ожидания запроса
+      loginAPI
+        .createNewRoom()
+        .then((response) => {
+          //Как получен ответ выполнить логику ниже
+          console.log(response.data);
+          if (response.data == true) {
+            //Если комната есть, включить кнопку логина и в dispatch отправить статус существования комнаты с флагом true
+            console.log("Room created");
+            dispatch(CHANGE_ROOM_EXISTS_STATUS_AC(true));
+            dispatch(CHANGE_NAME_STATUS_LOGGINING_BTN_AC("Create", true));
+          } else {
+            //Если же комнаты нет, включить кнопку логина  и в dispatch отправить статус существования комнаты с флагом false
+            console.log("Room not created.", response.data);
+            dispatch(CHANGE_ROOM_EXISTS_STATUS_AC(false));
+            dispatch(CHANGE_NAME_STATUS_LOGGINING_BTN_AC("Create"), true);
+          }
+        })
+        .catch((error) => {
+          //Если есть косяки при отправке запроса, вывести их на экран
+          console.log(error);
+        });
+    }
   };
 };

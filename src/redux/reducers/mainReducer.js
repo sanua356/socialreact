@@ -6,8 +6,8 @@ const actionsNames = {
 };
 
 const initialState = {
-  username: "username",
-  roomID: "corolina",
+  username: "123",
+  roomID: "444",
   isLoggined: true,
   roomIsExists: true,
 };

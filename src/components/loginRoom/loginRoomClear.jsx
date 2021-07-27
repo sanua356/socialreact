@@ -1,7 +1,6 @@
 import React from 'react';
 import LoginRoomStyle from './loginRoom.module.css';
 import { LoginRoomForm } from './LoginRoomForm';
-import { Redirect } from 'react-router-dom';
 
 function LoginRoomClear(props) {
     return (

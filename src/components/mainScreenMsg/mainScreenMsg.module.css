@@ -39,6 +39,12 @@
   text-align: left;
   margin-right: auto;
 }
+.messagesList .myMessage span {
+  color: red;
+}
+.messagesList .opponentMessage span {
+  color: blue;
+}
 .messagesList .opponentMessage {
   text-align: right;
   margin-left: auto;

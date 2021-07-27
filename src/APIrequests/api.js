@@ -32,4 +32,10 @@ export const loginAPI = {
       `http://socialreactapi/roomsexists.php?roomid=${roomID}`
     );
   },
+  createNewRoom: async () => {
+    const roomID = localStorage.getItem("roomID");
+    return await axios.get(
+      `http://socialreactapi/createnewroom.php?roomid=${roomID}`
+    );
+  },
 };

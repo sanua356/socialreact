@@ -33,7 +33,7 @@ const getMessagesUIMap = (messagesList, errors, myUsername) =>{
             key={messagesList.indexOf(message)}
             className={messageSenderStyle(message.messageSender, myUsername)}
         >
-            {message.messageSender}: {message.message}
+            <span>{message.messageSender}</span>: {message.message}
         </p >
         );
         return mappedMessagesArray;
