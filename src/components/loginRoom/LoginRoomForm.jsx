@@ -50,7 +50,7 @@ export const LoginRoomForm = (props) => {
         }}
         validateOnBlur
         validationSchema = {validationSchema}
-        onSubmit = {(values) => {        
+        onSubmit = {(values, resetForm) => {        
             props.sendDataFields(values.username, values.secretKeyUsername, values.roomID, changeCreateRoom);
             setFormTouched(true);
         }}

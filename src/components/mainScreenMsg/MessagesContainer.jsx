@@ -20,6 +20,5 @@ const mapDispatchToProps = (dispatch) =>{
     }
 }
 
-
 const MessagesContainer = connect(mapStateToProps, mapDispatchToProps)(MainScreenMessagesLogicFunctions);
 export default MessagesContainer;

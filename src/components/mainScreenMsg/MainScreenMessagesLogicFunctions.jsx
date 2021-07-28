@@ -3,9 +3,8 @@ import { useEffect } from "react";
 import Loader from '../CommonComponents/Loader/Loader';
 import MainScreenMsgClear from "./MainScreenMsgClear";
 import { connect } from 'react-redux';
-import MainScrMsgStyle from './mainScreenMsg.module.css';
 import { CHANGE_LOADING_STATUS_AC, addNewMessageFromServerTC} from '../../redux/reducers/messagesChatReducer';
-import { withRouter } from 'react-router-dom';
+import { SELECT_MESSAGE_FROM_CHAT_AC } from './../../redux/reducers/messagesChatReducer';
 
 function MainScreenMessagesLogicComponent(props) {
     //get array messages from file with map
@@ -19,30 +18,6 @@ function MainScreenMessagesLogicComponent(props) {
     )
 }
 
-function messageSenderStyle(usernameSenderMessage, myUsername) {
-    if (myUsername === usernameSenderMessage) {
-        return MainScrMsgStyle.myMessage;
-    } else {
-        return MainScrMsgStyle.opponentMessage;
-    }
-}
-const getMessagesUIMap = (messagesList, errors, myUsername) =>{
-    if (Object.keys(messagesList).length > 0) {
-        const mappedMessagesArray = messagesList.map((message) =>
-        <p
-            key={messagesList.indexOf(message)}
-            className={messageSenderStyle(message.messageSender, myUsername)}
-        >
-            <span>{message.messageSender}</span>: {message.message}
-        </p >
-        );
-        return mappedMessagesArray;
-    }else{
-        return(
-            <p className={MainScrMsgStyle.messagesList}>{errors}</p>
-        )
-    }
-}
 
 const mapStateToProps = (state) =>{
     return{
@@ -53,7 +28,8 @@ const mapStateToProps = (state) =>{
         errors: state.messagesPage.errors,
         isLoading: state.messagesPage.isLoading,
         roomIsExists: state.manyPages.roomIsExists,
-        messagesEmptyStatus: state.messagesPage.messagesEmptyStatusRoom
+        messagesEmptyStatus: state.messagesPage.messagesEmptyStatusRoom,
+        selectedMessages: state.messagesPage.seletctedMessages
     }
 }
 const mapDispatchToProps = (dispatch) =>{
@@ -61,17 +37,13 @@ const mapDispatchToProps = (dispatch) =>{
         sendNewMessage: (errors, myUsername, roomID, message) => {
             dispatch(addNewMessageFromServerTC(errors, myUsername, roomID, message));
         },
-        roleMessage: (usernameSenderMessage, myUsername) =>{
-            return messageSenderStyle(usernameSenderMessage, myUsername);
-        },
-        getMessagesUIMap: (messagesList, errors, myUsername) => {
-            return getMessagesUIMap(messagesList, errors, myUsername);
-        },
         changeLoadingStatus: (loadingStatus) =>{
             dispatch(CHANGE_LOADING_STATUS_AC(loadingStatus));
+        },
+        selectMessageFromChat: (messageID) => {
+            dispatch(SELECT_MESSAGE_FROM_CHAT_AC(messageID));
         }
     }
 }
-let MainScreenMessagesLogicFunctions = withRouter(MainScreenMsgClear);
-const MainScreenMsgClearComponent = connect(mapStateToProps, mapDispatchToProps)(MainScreenMessagesLogicFunctions);
+const MainScreenMsgClearComponent = connect(mapStateToProps, mapDispatchToProps)(MainScreenMsgClear);
 export default MainScreenMessagesLogicComponent;

@@ -5,6 +5,7 @@ const actionsNames = {
   GET_MESSAGES_LIST_FROM_API: "GET_MESSAGES_LIST_FROM_API",
   CHANGE_LOADING_STATUS: "CHANGE_LOADING_STATUS",
   ADD_ERROR_MESSAGE: "ADD_ERROR_MESSAGE",
+  SELECT_MESSAGE_FROM_CHAT: "SELECT_MESSAGE_FROM_CHAT",
 };
 
 export function ADD_NEW_MESSAGE_FROM_DATA_BASE_AC(
@@ -48,11 +49,20 @@ export function ADD_ERROR_MESSAGE_АС(error) {
     error,
   };
 }
+
+export function SELECT_MESSAGE_FROM_CHAT_AC(messageID) {
+  return {
+    type: "SELECT_MESSAGE_FROM_CHAT",
+    messageID,
+  };
+}
+
 const initialState = {
   messagesList: [], //Массив списка сообщений, полученных с сервера для вывода в UI
   messagesEmptyStatusRoom: false, //Переменная, которая ставится в true, если с сервера пришла пустая комната без сообщений
   errors: "", //Переменная для вывода ошибок ввода на экран (если они возникают)
   isLoading: false, //Флаг показа GIF с Loader, пока выполняется запрос к серверу
+  seletctedMessages: [], //Обьект в котором будут храниться ID сообщений для взаимодействия (Например удаление)
 };
 
 export const messagesReducer = (state = initialState, action) => {
@@ -111,6 +121,20 @@ export const messagesReducer = (state = initialState, action) => {
     case actionsNames.ADD_ERROR_MESSAGE: //Если АС = появились ошибки при выполнении логики
       stateCopy = { ...state };
       stateCopy.errors = action.error; //Сохранить в state строку с ошибкой для последующего вывода её на экран
+      return stateCopy;
+    case actionsNames.SELECT_MESSAGE_FROM_CHAT: //Если АС = выбрано сообщение в чате (например чтобы удалить). Отправить в state его ID
+      stateCopy = { ...state };
+      const checkExistsMessage = stateCopy.seletctedMessages.indexOf(
+        action.messageID
+      );
+      console.log(checkExistsMessage);
+      if (checkExistsMessage == -1) {
+        stateCopy.seletctedMessages.push(action.messageID);
+        console.log("message pushed");
+      } else {
+        stateCopy.seletctedMessages.splice(checkExistsMessage, 1);
+        console.log("message deleted");
+      }
       return stateCopy;
     default:
       return state;

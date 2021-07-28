@@ -27,6 +27,7 @@
   overflow-x: hidden;
 }
 .messagesList p {
+  cursor: pointer;
   max-width: 25vw;
   width: fit-content;
   padding: 10px;
@@ -49,8 +50,14 @@
   text-align: right;
   margin-left: auto;
 }
-
+.myMessage.selectedMessage {
+  margin-left: 70px;
+}
+.opponentMessage.myMessage.selectedMessage {
+  margin-right: 70px;
+}
 .controlElementsChat {
+  display: flex;
   margin: auto;
   max-width: 600px;
 }
@@ -69,7 +76,14 @@
   border-radius: 10px;
   height: auto;
 }
+.controlsBtns textarea::placeholder {
+  letter-spacing: 1px;
+  font-family: "Segoe UI", sans-serif;
+}
+
 .controlsBtns button {
+  max-width: 100%;
+  font-family: "Segoe UI", sans-serif;
   transition: 0.2s ease-in-out;
   cursor: pointer;
   color: white;
@@ -101,4 +115,15 @@ button[enabled] {
   color: red;
   text-align: center;
   margin-bottom: 10px;
+}
+.changeSendedMessageControlsBtns {
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.changeSendedMessageControlsBtns svg {
+  margin-right: 5px;
 }

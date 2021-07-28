@@ -2,6 +2,8 @@ import React from 'react'
 import MainScrMsg from './mainScreenMsg.module.css';
 import { Form, Field, Formik } from 'formik';
 import * as yup from 'yup';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 function MainScreenMsgInputForm(props) {
     const validationSchema = yup.object().shape({
@@ -19,9 +21,17 @@ function MainScreenMsgInputForm(props) {
             validationSchema = {validationSchema} //Подключение схемы валидации к Формику
             validateOnBlur //Запуск валидации при изменении значения поля
         >   
-        {({values, errors, touched, handleChange, isValid, handleSubmit, dirty, setFieldValue}) => ( //Функции и переменные, которые регулируют логику взаимодействия с формой
+        {({values, handleChange, isValid, handleSubmit, dirty}) => ( //Функции и переменные, которые регулируют логику взаимодействия с формой
             
             <div className={MainScrMsg.controlElementsChat}>
+                
+                {/* <div className={MainScrMsg.changeSendedMessageControlsBtns}>
+                    <span onClick={() => props.deleteMessages()}>
+                        <FontAwesomeIcon icon={faTrashAlt}/>
+                        Delete
+                    </span>
+                </div> */}
+
                 
                 {/* {touched.messageTextarea && errors.messageTextarea 
                 ? <span className = {MainScrMsg.errors}>
@@ -43,7 +53,7 @@ function MainScreenMsgInputForm(props) {
                             disabled = {(!isValid && !dirty) || !dirty} //Отключить кнопку если форма не валидна или не тронута
                             type="submit"
                             id={MainScrMsg.sendMessageBtn}
-                            onSubmit = {handleSubmit}>Send Message</button>
+                            onSubmit = {handleSubmit}>Send message</button>
                              {/*Кнопка отправки сообщения на сервер */}
                     </Form>
             </div>
