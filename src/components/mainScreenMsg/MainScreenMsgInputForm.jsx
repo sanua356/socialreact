@@ -23,11 +23,11 @@ function MainScreenMsgInputForm(props) {
             
             <div className={MainScrMsg.controlElementsChat}>
                 
-                {touched.messageTextarea && errors.messageTextarea 
+                {/* {touched.messageTextarea && errors.messageTextarea 
                 ? <span className = {MainScrMsg.errors}>
                     {errors.messageTextarea}
                     </span> 
-                : null} {/* Элемент для вывода ошибок валидации поля ввода сообщений */}
+                : null} Элемент для вывода ошибок валидации поля ввода сообщений */}
 
                     <Form className={MainScrMsg.controlsBtns}>       
                         <Field 

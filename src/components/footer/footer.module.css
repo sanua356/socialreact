@@ -1,5 +1,11 @@
 footer {
-  font-size: 20px;
+  text-decoration: underline;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.3;
+  font-size: 15px;
   color: white;
   padding: 10px;
   overflow: hidden;

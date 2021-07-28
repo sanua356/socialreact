@@ -9,8 +9,7 @@ function MessagesClear(props){
 
     const chatScreen = React.createRef();
     useEffect(() => {
-        console.log("CHAT RERENDERED");
-
+        chatScreen.current.scrollTop = chatScreen.current.scrollHeight;
     }, [props.messagesList])
 
     return (
