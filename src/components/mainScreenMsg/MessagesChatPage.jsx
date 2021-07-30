@@ -39,7 +39,9 @@ const getMessagesUIMap = ( //Отобразить сообщения с серв
         return mappedMessagesArray; //Возвращает готовый массив JSX элементов с сообщениями для отображения
     }else{
         return(
-            <p className={MainScrMsgStyle.messagesList}>{errors}</p> //Если есть ошибки, они выведутся через этот элемент
+            <div className={MainScrMsgStyle.messagesList}> 
+                <p className={MainScrMsgStyle.messagesList}>{errors}</p> //Если есть ошибки, они выведутся через этот элемент
+            </div>
         )
     }
 }
@@ -58,7 +60,10 @@ const MessagesChatPage = React.memo((props) => { //Компонента, кот�
         messageSelected
 );//Получить список всех сообщений с BLL
         useEffect(() => {
-            chatScreen.current.scrollTop = chatScreen.current.scrollHeight;
+            if (props.messagesList.length) {
+                chatScreen.current.scrollTop = chatScreen.current.scrollHeight;
+            }
+            
         }, [props.messagesList]); //Скролл чата вниз, когда отправилось или удалилось сообщение
 
     return (

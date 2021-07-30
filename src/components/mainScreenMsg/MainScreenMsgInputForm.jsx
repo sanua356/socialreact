@@ -66,6 +66,12 @@ function MainScreenMsgInputForm(props) {
                         placeholder="Enter new message..."
                         value =  {values.messageTextarea}
                         onChange = {handleChange}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                e.preventDefault();
+                              handleSubmit();
+                            }
+                        }}
                         /> {/*Поле ввода сообщений с конфигурационными значениями */ }
                         
                             <button

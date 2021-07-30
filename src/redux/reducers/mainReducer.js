@@ -6,10 +6,10 @@ const actionsNames = {
 };
 
 const initialState = {
-  username: "123",
-  roomID: "123",
-  isLoggined: true,
-  roomIsExists: true,
+  username: "",
+  roomID: "",
+  isLoggined: false,
+  roomIsExists: false,
 };
 
 export function SAVE_ROOMID_AND_USERNAME_LOCALSTORAGE_AC() {

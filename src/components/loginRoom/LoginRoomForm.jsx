@@ -57,7 +57,13 @@ export const LoginRoomForm = (props) => {
         >
 
         {({values, errors, touched, handleChange, handleBlur, isValid, handleSubmit, dirty}) => (
-                <form className={LoginRoomStyle.form}>
+                <form className={LoginRoomStyle.form}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                      handleSubmit();
+                    }
+                }}>
                     <div className = {LoginRoomStyle.titleAndLogo}>
                         <img src={loginIcon} alt="Login icon" />
                         <h2>{changeCreateRoom ? "Create room" : "Login room"}</h2>
