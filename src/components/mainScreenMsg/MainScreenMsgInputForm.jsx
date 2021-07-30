@@ -32,16 +32,24 @@ function MainScreenMsgInputForm(props) {
         {({values, handleChange, isValid, handleSubmit, dirty}) => ( //Функции и переменные, которые регулируют логику взаимодействия с формой
             
             <div className={MainScrMsg.controlElementsChat}>
-                
-                <div 
-                disabled = {!selectedMessagesLength >= 1}
-                className={MainScrMsg.changeSendedMessageControlsBtns}
-                >
-                    <span onClick={() => props.deleteMessages(props.roomID, props.selectedMessages)}>
-                        <FontAwesomeIcon icon={faTrashAlt}/>
-                        Delete
+                <div className={MainScrMsg.deleteAndCounterSelectedMessages}>
+                    <div 
+                    disabled = {!selectedMessagesLength >= 1}
+                    className={MainScrMsg.changeSendedMessageControlsBtns}
+                    >
+                        <span onClick={() => props.deleteMessages(props.roomID, props.selectedMessages)}>
+                            <FontAwesomeIcon icon={faTrashAlt}/>
+                            Delete
+                        </span>
+                    </div>
+                    <span 
+                    className = {selectedMessagesLength >= 1 
+                        ? MainScrMsg.deleteAndCounterSelectedMessagesVisible
+                        : MainScrMsg.deleteAndCounterSelectedMessages}
+                    >Messages selected: <aside>{props.selectedMessagesLength}</aside>
                     </span>
                 </div>
+                
 
                 
                 {/* {touched.messageTextarea && errors.messageTextarea 
