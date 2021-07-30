@@ -20,6 +20,9 @@ function MessagesClear(props){
                     errors = {props.errors}
                     sendNewMessage = {props.sendNewMessage}
                     deleteMessages = {props.deleteMessages}
+                    selectedMessages = {props.selectedMessages}
+                    selectedMessagesLength = {props.selectedMessagesLength}
+                    deleteMessages = {props.deleteMessages}
                     //handleKeyPress = {handleKeyPress}
                     />
                 </div>

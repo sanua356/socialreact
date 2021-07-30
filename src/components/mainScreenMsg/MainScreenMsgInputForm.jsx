@@ -3,9 +3,17 @@ import MainScrMsg from './mainScreenMsg.module.css';
 import { Form, Field, Formik } from 'formik';
 import * as yup from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState } from 'react';
 
 function MainScreenMsgInputForm(props) {
+    const [selectedMessagesLength, setSelectedMessagesLength] = useState(props.selectedMessagesLength);
+
+    useEffect (() => {
+        console.log("Message selected changed");
+        setSelectedMessagesLength(props.selectedMessagesLength);
+    }, [props.selectedMessagesLength])
+    
     const validationSchema = yup.object().shape({
         messageTextarea: yup.string().typeError("This field should be string").required("Message field is empty")
     }) //Валидационная схема поля ввода сообщений
@@ -25,12 +33,15 @@ function MainScreenMsgInputForm(props) {
             
             <div className={MainScrMsg.controlElementsChat}>
                 
-                {/* <div className={MainScrMsg.changeSendedMessageControlsBtns}>
-                    <span onClick={() => props.deleteMessages()}>
+                <div 
+                disabled = {!selectedMessagesLength >= 1}
+                className={MainScrMsg.changeSendedMessageControlsBtns}
+                >
+                    <span onClick={() => props.deleteMessages(props.roomID, props.selectedMessages)}>
                         <FontAwesomeIcon icon={faTrashAlt}/>
                         Delete
                     </span>
-                </div> */}
+                </div>
 
                 
                 {/* {touched.messageTextarea && errors.messageTextarea 
@@ -56,6 +67,16 @@ function MainScreenMsgInputForm(props) {
                             onSubmit = {handleSubmit}>Send message</button>
                              {/*Кнопка отправки сообщения на сервер */}
                     </Form>
+
+                <div 
+                disabled = {selectedMessagesLength !== 1}
+                className={MainScrMsg.changeSendedMessageControlsBtns}
+                >
+                    <span onClick={() => props.changeMessage()}>
+                        <FontAwesomeIcon icon={faEdit}/>
+                        Change
+                    </span>
+                </div>
             </div>
         )}  
         </Formik>

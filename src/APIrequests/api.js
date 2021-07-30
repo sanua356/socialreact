@@ -23,6 +23,17 @@ export const messagesAPI = {
       `http://socialreactapi/roomsgetmessages.php?roomid=${roomID}`
     );
   },
+  deleteMessages: async (roomID, messagesID) => {
+    console.log(roomID, messagesID);
+    return await axios.delete(
+      `http://socialreactapi/deletemessages.php?roomid=${roomID}`,
+      {
+        data: {
+          messagesID,
+        },
+      }
+    );
+  },
 };
 
 export const loginAPI = {

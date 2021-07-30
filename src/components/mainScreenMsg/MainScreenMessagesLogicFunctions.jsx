@@ -3,13 +3,15 @@ import { useEffect } from "react";
 import Loader from '../CommonComponents/Loader/Loader';
 import MainScreenMsgClear from "./MainScreenMsgClear";
 import { connect } from 'react-redux';
-import { CHANGE_LOADING_STATUS_AC, addNewMessageFromServerTC} from '../../redux/reducers/messagesChatReducer';
+import { CHANGE_LOADING_STATUS_AC, addNewMessageFromServerTC, DELETE_MESSAGES_FROM_CHAT_AC, deleteMessagesFromServerTC} from '../../redux/reducers/messagesChatReducer';
 import { SELECT_MESSAGE_FROM_CHAT_AC } from './../../redux/reducers/messagesChatReducer';
 
 function MainScreenMessagesLogicComponent(props) {
     //get array messages from file with map
     useEffect(() => {
-        props.getMessagesFromServerTC(props.roomID, props.roomIsExists);
+        if(props.messagesList <= 0){
+            props.getMessagesFromServerTC(props.roomID, props.roomIsExists);
+        }
     }, []) //get messages from server API 
     return(
         <>
@@ -29,7 +31,8 @@ const mapStateToProps = (state) =>{
         isLoading: state.messagesPage.isLoading,
         roomIsExists: state.manyPages.roomIsExists,
         messagesEmptyStatus: state.messagesPage.messagesEmptyStatusRoom,
-        selectedMessages: state.messagesPage.seletctedMessages
+        selectedMessages: state.messagesPage.seletctedMessages,
+        selectedMessagesLength: state.messagesPage.seletctedMessages.length
     }
 }
 const mapDispatchToProps = (dispatch) =>{
@@ -42,6 +45,11 @@ const mapDispatchToProps = (dispatch) =>{
         },
         selectMessageFromChat: (messageID) => {
             dispatch(SELECT_MESSAGE_FROM_CHAT_AC(messageID));
+        },
+        deleteMessages: (roomID, messagesID) => {
+            console.log(roomID, messagesID);
+            dispatch(deleteMessagesFromServerTC(roomID, messagesID));
+            dispatch(DELETE_MESSAGES_FROM_CHAT_AC());
         }
     }
 }

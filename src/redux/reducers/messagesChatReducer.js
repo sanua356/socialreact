@@ -6,6 +6,7 @@ const actionsNames = {
   CHANGE_LOADING_STATUS: "CHANGE_LOADING_STATUS",
   ADD_ERROR_MESSAGE: "ADD_ERROR_MESSAGE",
   SELECT_MESSAGE_FROM_CHAT: "SELECT_MESSAGE_FROM_CHAT",
+  DELETE_MESSAGES_FROM_CHAT: "DELETE_MESSAGES_FROM_CHAT",
 };
 
 export function ADD_NEW_MESSAGE_FROM_DATA_BASE_AC(
@@ -57,6 +58,12 @@ export function SELECT_MESSAGE_FROM_CHAT_AC(messageID) {
   };
 }
 
+export function DELETE_MESSAGES_FROM_CHAT_AC() {
+  return {
+    type: "DELETE_MESSAGES_FROM_CHAT",
+  };
+}
+
 const initialState = {
   messagesList: [], //Массив списка сообщений, полученных с сервера для вывода в UI
   messagesEmptyStatusRoom: false, //Переменная, которая ставится в true, если с сервера пришла пустая комната без сообщений
@@ -69,7 +76,6 @@ export const messagesReducer = (state = initialState, action) => {
   let stateCopy = { ...state };
   switch (action.type) {
     case actionsNames.ADD_NEW_MESSAGE_FROM_DATA_BASE: //Если АС = отправка сообщения к БД
-      console.log(action);
       stateCopy = { ...state, messagesList: [...state.messagesList] };
       //Если нет ошибок ввода
       if (action.message) {
@@ -127,14 +133,34 @@ export const messagesReducer = (state = initialState, action) => {
       const checkExistsMessage = stateCopy.seletctedMessages.indexOf(
         action.messageID
       );
-      console.log(checkExistsMessage);
       if (checkExistsMessage == -1) {
         stateCopy.seletctedMessages.push(action.messageID);
-        console.log("message pushed");
       } else {
         stateCopy.seletctedMessages.splice(checkExistsMessage, 1);
-        console.log("message deleted");
       }
+      return stateCopy;
+    case actionsNames.DELETE_MESSAGES_FROM_CHAT:
+      stateCopy = {
+        ...state,
+        messagesList: [...state.messagesList],
+        seletctedMessages: [...state.seletctedMessages],
+      };
+      console.log(stateCopy.messagesList);
+      deleteMessagesFromServerTC(stateCopy.seletctedMessages);
+      // for (let i = 0; i < stateCopy.seletctedMessages.length; i++) {
+      //   for (let j = 0; j < stateCopy.messagesList.length; j++) {
+      //     const messageID = stateCopy.messagesList[j].id;
+      //     if (messageID === stateCopy.seletctedMessages[i]) {
+      //       console.log(
+      //         stateCopy.messagesList[j],
+      //         stateCopy.seletctedMessages[i]
+      //       );
+      //       stateCopy.messagesList.splice(stateCopy.messagesList[j], 1);
+      //     }
+      //   }
+      // }
+      // stateCopy.seletctedMessages = [];
+      // console.log(stateCopy.messagesList);
       return stateCopy;
     default:
       return state;
@@ -185,6 +211,18 @@ export const getMessagesFromServerTC = (roomID, roomIsExists) => {
       dispatch(
         ADD_ERROR_MESSAGE_АС("No saved messages from room as room not exist")
       );
+    }
+  };
+};
+
+export const deleteMessagesFromServerTC = (roomID, messagesID) => {
+  return async (dispatch) => {
+    if (messagesID.length >= 1) {
+      const response = await messagesAPI.deleteMessages(roomID, messagesID);
+      console.log(response);
+      return response;
+    } else {
+      console.log("Messages list is empty!");
     }
   };
 };
