@@ -1,6 +1,8 @@
 import React from 'react';
-import MainScrMsgStyle from './mainScreenMsg.module.css';
+import MainScrMsgStyle from './styles/messagesChatBubbles.module.css';
 import { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserNinja, faUserSecret, faUserTie } from '@fortawesome/free-solid-svg-icons';
 
 function messageSenderStyle(usernameSenderMessage, myUsername) {//Функция, которая добавляет класс, 
     //если сообщение в базе хранится не с ника пользователя (если оппонент, то класс, передвигающий сообщение вправо)
@@ -21,20 +23,30 @@ const getMessagesUIMap = ( //Отобразить сообщения с серв
     ) =>{
     if (Object.keys(messagesList).length > 0) {//Проверка на присутствие сообщений в массиве (если сообщений нет, будет выведено соответствующее опопвещение).
         const mappedMessagesArray = messagesList.map((message) => //Преобразуем массив обьектов сообщений в массив JSX элементов
-        <p
-            key={messagesList.indexOf(message)} //Вешаются ключии для каждого сообщения, чтобы реакт лишний раз не делал ререндер
-            className = 
-            {//Вешает класс для стилизации сообщения, (вправо или влево на экране) в завистимости от ответа функции
-            `${messageSenderStyle(message.messageSender, myUsername)} 
-            ${selectedMessagesArray.indexOf(message.id) !== -1 ? MainScrMsgStyle.selectedMessage: null}` //Вешает класс выбранног осообщения, если произошёл клик на него
-            } 
-            onClick = {() => { if(message.messageSender === myUsername){
-                selectMessageFromChat(message.id);//Добавляет (если его нет) и удаляет (если он есть) ID с выбранным сообщением в массив выбранных сообщений 
-                setMessageSelected(!messageSelected); //Меняет состояние хука выбранного сообщения, чтобы раюотала стилизация подстветки
-            }}}
+        <div className = 
+        {`${MainScrMsgStyle.message} 
+          ${messageSenderStyle(message.messageSender, myUsername)}
+        `}
+        key={messagesList.indexOf(message)} //Вешаются ключии для каждого сообщения, чтобы реакт лишний раз не делал ререндер
         >
-            <span>{message.messageSender}</span>: {message.message} {/*Выводит отправителя и сообщение на экран */}
-        </p >
+            
+            {message.messageSender === myUsername && <FontAwesomeIcon icon={faUserTie} className = {"fas fa-lg"}/>}
+            <p
+                
+                className = 
+                {//Вешает класс для стилизации сообщения, (вправо или влево на экране) в завистимости от ответа функции
+                `${selectedMessagesArray.indexOf(message.id) !== -1 ? MainScrMsgStyle.selectedMessage: null}` //Вешает класс выбранног осообщения, если произошёл клик на него
+                } 
+                onClick = {() => { if(message.messageSender === myUsername){
+                    selectMessageFromChat(message.id);//Добавляет (если его нет) и удаляет (если он есть) ID с выбранным сообщением в массив выбранных сообщений 
+                    setMessageSelected(!messageSelected); //Меняет состояние хука выбранного сообщения, чтобы раюотала стилизация подстветки
+                }}}
+            >   
+                <span>{message.messageSender}</span>: {message.message} {/*Выводит отправителя и сообщение на экран */}
+            </p>
+            {message.messageSender !== myUsername && <FontAwesomeIcon icon={faUserSecret} className = {"fas fa-lg"}/>}
+        </div>
+        
         );
         return mappedMessagesArray; //Возвращает готовый массив JSX элементов с сообщениями для отображения
     }else{

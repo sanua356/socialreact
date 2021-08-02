@@ -15,7 +15,7 @@ function MainScreenMessagesLogicComponent(props) {
     }, []) //get messages from server API 
     return(
         <>
-        {props.isLoading ? <Loader/> : <MainScreenMsgClearComponent />}
+        {props.isLoading ? <Loader errors = {props.errors} lazyLoadComponent = {true} /> : <MainScreenMsgClearComponent />}
         </>
     )
 }
@@ -32,13 +32,15 @@ const mapStateToProps = (state) =>{
         roomIsExists: state.manyPages.roomIsExists,
         messagesEmptyStatus: state.messagesPage.messagesEmptyStatusRoom,
         selectedMessages: state.messagesPage.seletctedMessages,
-        selectedMessagesLength: state.messagesPage.seletctedMessages.length
+        selectedMessagesLength: state.messagesPage.seletctedMessages.length,
+        usernameSecretKey: state.manyPages.usernameSecretKey
     }
 }
 const mapDispatchToProps = (dispatch) =>{
     return{
-        sendNewMessage: (errors, myUsername, roomID, message) => {
-            dispatch(addNewMessageFromServerTC(errors, myUsername, roomID, message));
+        sendNewMessage: (errors, myUsername, roomID, message, usernameSecretKey) => {
+            console.log(errors, myUsername, roomID, message, usernameSecretKey);
+            dispatch(addNewMessageFromServerTC(errors, myUsername, roomID, message, usernameSecretKey));
         },
         changeLoadingStatus: (loadingStatus) =>{
             dispatch(CHANGE_LOADING_STATUS_AC(loadingStatus));

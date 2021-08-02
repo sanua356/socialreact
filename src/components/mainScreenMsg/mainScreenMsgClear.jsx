@@ -1,19 +1,38 @@
-import React, {useEffect} from 'react';
-import MainScrMsg from './mainScreenMsg.module.css';
-import LoaderGif from '../../assets/Loader/loaderGif.gif';
+import React from 'react';
+import MainScrMsg from './styles/messagesChatArea.module.css';
 import MainScreenMsgInputForm from './MainScreenMsgInputForm';
 import MessagesChatPage from './MessagesChatPage';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
+import {faBell} from '@fortawesome/free-regular-svg-icons';
 function MessagesClear(props){
 
-    //const handleKeyPress = (event) =>  event.key === "Enter" ? sendNewMessage() : null;
     return (
         <div className="workspace">
-            <img src={LoaderGif} alt="Loader" style={{display: 'none'}} />
             <main className={MainScrMsg.Main}>
                 <div className={MainScrMsg.chatBlock}>  
+                    <div className={MainScrMsg.chatBlockHeader}>
+                        <div className={MainScrMsg.chatBlockHeaderRoomInfo}>
+                            <h3>Room: {props.roomID}</h3>
+                            <span>Users: 3</span>
+                        </div>
+
+                         {props.selectedMessagesLength >= 1 && 
+                         <span className={MainScrMsg.selectedMessagesCounter}
+                         >Messages selected: 
+                            <aside>
+                                {props.selectedMessagesLength}
+                            </aside>
+                        </span>}
+
+                        <div className={MainScrMsg.chatBlockHeaderControlsBtns}>
+                            <a href="#">
+                                <FontAwesomeIcon icon={faEllipsisH} className={"fas fa-lg"}/>
+                            </a>
+                            <a href="#"><FontAwesomeIcon icon={faBell} className={`"fas fa-lg" ${MainScrMsg.bellAnimation}`}/></a>
+                        </div>
+                    </div>
                     <MessagesChatPage {...props}/>
-                    <hr />
                     <MainScreenMsgInputForm 
                     roomID = {props.roomID}
                     username = {props.myUsername}
@@ -23,7 +42,7 @@ function MessagesClear(props){
                     selectedMessages = {props.selectedMessages}
                     selectedMessagesLength = {props.selectedMessagesLength}
                     deleteMessages = {props.deleteMessages}
-                    //handleKeyPress = {handleKeyPress}
+                    usernameSecretKey = {props.usernameSecretKey}
                     />
                 </div>
             </main>

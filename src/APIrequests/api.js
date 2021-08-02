@@ -1,12 +1,18 @@
 import * as axios from "axios";
 
 export const messagesAPI = {
-  addNewMessageFromServer: async (roomID, userSenderMessage, message) => {
+  addNewMessageFromServer: async (
+    roomID,
+    userSenderMessage,
+    message,
+    usernameSecretKey
+  ) => {
     if (roomID && userSenderMessage && message) {
       return await axios
         .post(`http://socialreactapi/addnewmessage.php?roomid=${roomID}`, {
           userSenderMessage: userSenderMessage,
           message: message,
+          usernameSecretKey: usernameSecretKey,
         })
         .then(
           (response) => {

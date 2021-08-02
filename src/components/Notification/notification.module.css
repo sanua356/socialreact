@@ -1,0 +1,8 @@
+.notification {
+  position: absolute;
+  left: 90%;
+  top: 90%;
+  background: yellow;
+  padding: 5px 15px;
+  font-size: 20px;
+}

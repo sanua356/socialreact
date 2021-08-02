@@ -172,45 +172,56 @@ export const addNewMessageFromServerTC = (
   errors,
   myUsername,
   roomID,
-  message
+  message,
+  usernameSecretKey
 ) => {
   return (dispatch) => {
-    messagesAPI.addNewMessageFromServer(roomID, myUsername, message).then(
-      (response) =>
-        dispatch(
-          ADD_NEW_MESSAGE_FROM_DATA_BASE_AC(
-            errors,
-            myUsername,
-            roomID,
-            message,
-            response
-          )
-        ) //Добавить сообщение в локальный state); //Отправить запрос с данными сообщения на сервер
-    );
+    messagesAPI
+      .addNewMessageFromServer(roomID, myUsername, message, usernameSecretKey)
+      .then(
+        (response) =>
+          dispatch(
+            ADD_NEW_MESSAGE_FROM_DATA_BASE_AC(
+              errors,
+              myUsername,
+              roomID,
+              message,
+              response
+            )
+          ) //Добавить сообщение в локальный state); //Отправить запрос с данными сообщения на сервер
+      );
   };
 };
 
 export const getMessagesFromServerTC = (roomID, roomIsExists) => {
   //Thunk creator, посылающий запрос к API и получающий список сообщений по roomID
   return (dispatch) => {
-    if (roomIsExists) {
-      //Если комната с таким RoomID вообще существует
-      dispatch(CHANGE_LOADING_STATUS_AC(true)); //Включить Loader
-      return messagesAPI
-        .getMessagesFromServer(roomID)
-        .then((response) => {
-          //Послать запрос к API и когда получили ответ, отключить Loader и загрузить response в локальный state через dispatch
-          dispatch(GET_MESSAGES_LIST_FROM_API_АС(roomID, response.data));
-          dispatch(CHANGE_LOADING_STATUS_AC(false));
-        })
-        .catch((error) => {
-          //Вывести ошибки при отправке запроса (если они появились)
-          console.log(error);
-        });
-    } else {
-      dispatch(
-        ADD_ERROR_MESSAGE_АС("No saved messages from room as room not exist")
-      );
+    try {
+      if (roomIsExists) {
+        //Если комната с таким RoomID вообще существует
+        dispatch(CHANGE_LOADING_STATUS_AC(true)); //Включить Loader
+        return messagesAPI
+          .getMessagesFromServer(roomID)
+          .then((response) => {
+            //Послать запрос к API и когда получили ответ, отключить Loader и загрузить response в локальный state через dispatch
+            dispatch(GET_MESSAGES_LIST_FROM_API_АС(roomID, response.data));
+            dispatch(CHANGE_LOADING_STATUS_AC(false));
+          })
+          .catch((error) => {
+            //Вывести ошибки при отправке запроса (если они появились)
+            dispatch(
+              ADD_ERROR_MESSAGE_АС(
+                "Sorry. We have not received any data from the server. Please try again later."
+              )
+            );
+          });
+      } else {
+        dispatch(
+          ADD_ERROR_MESSAGE_АС("No saved messages from room as room not exist")
+        );
+      }
+    } catch (error) {
+      console.log("Error connecting");
     }
   };
 };

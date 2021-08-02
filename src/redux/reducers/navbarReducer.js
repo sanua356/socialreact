@@ -1,9 +1,5 @@
-import {
-  faUser,
-  faComments,
-  faEdit,
-  faDoorOpen,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faDoorOpen } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faComments } from "@fortawesome/free-regular-svg-icons";
 const initialState = {
   //State с названиями и ссылками для перехода на странице в меню navbar
   sidebarMenuItems: [

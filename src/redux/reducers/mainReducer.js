@@ -6,10 +6,11 @@ const actionsNames = {
 };
 
 const initialState = {
-  username: "",
-  roomID: "",
-  isLoggined: false,
-  roomIsExists: false,
+  username: "username",
+  roomID: "corolina",
+  usernameSecretKey: "corolina",
+  isLoggined: true,
+  roomIsExists: true,
 };
 
 export function SAVE_ROOMID_AND_USERNAME_LOCALSTORAGE_AC() {
@@ -34,10 +35,12 @@ export const mainReducer = (state = initialState, action) => {
       if (
         //Если в localstorage попали данные со странице логина, значит валидация успешна и комната существует
         localStorage.getItem("username") !== null &&
-        localStorage.getItem("roomID") !== null
+        localStorage.getItem("roomID") !== null &&
+        localStorage.getItem("usernameSecretKey") !== null
       ) {
         stateCopy.username = localStorage.getItem("username"); //Сохранить в state данные ника из localstorage
         stateCopy.roomID = localStorage.getItem("roomID"); //Сохранить в state данные RoomID из localstorage
+        stateCopy.usernameSecretKey = localStorage.getItem("usernameSecretKey"); //Сохранить в state данные секретного ключа ника из localstorage
         stateCopy.isLoggined = true; //Поставить флаг залогинености на true
       } else {
         //Если нет данных из localstorage
