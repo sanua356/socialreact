@@ -1,35 +1,31 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faDoorOpen } from '@fortawesome/free-solid-svg-icons';
-import HeadStyle from './header.module.css';
-import { NavLink } from 'react-router-dom';
+import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
+import {faBell} from '@fortawesome/free-regular-svg-icons';
+import HeaderStyle from './header.module.css';
 
-const Header = React.memo((props) => {
+const Header = React.memo((props, loadedFromMessagesPage = false) => {
     return (
-        <div className="header-block">
-            <header className={HeadStyle.header}>
-                <div className={HeadStyle.UserBlock}>
-                    <FontAwesomeIcon icon={faUser} />
-                    <span>Hello, {props.username}!</span>
-                    <span>Your room: {props.roomID}</span>
-                </div>
-                <div className={HeadStyle.LogoBlock}>
-                    <a href = "/messages">
-                         Anonymous chat
-                    </a>
-                </div>
-                <div className={HeadStyle.MenuBlock}>
-                    <nav>
-                        <ul className={HeadStyle.menu}>
-                            <NavLink to="/logout">
-                                <FontAwesomeIcon icon={faDoorOpen} />
-                                <li className={HeadStyle.menuItem} >Logout Chat</li>
-                            </NavLink>
-                        </ul>
-                    </nav>
-                </div>
-            </header>
-        </div>
+        <div className={HeaderStyle.header}>
+                        <div className={HeaderStyle.headerRoomInfo}>
+                            <h3>{props.headerTitle}</h3>
+                            <span>{props.headerDescription}</span>
+                        </div>
+                         {props.selectedMessagesLength >= 1 && loadedFromMessagesPage && 
+                         <span className={HeaderStyle.selectedMessagesCounter}
+                         >Messages selected: 
+                            <aside>
+                                {props.selectedMessagesLength}
+                            </aside>
+                        </span>}
+
+                        <div className={HeaderStyle.headerControlsBtns}>
+                            <a href="#">
+                                <FontAwesomeIcon icon={faEllipsisH} className={"fas fa-lg"}/>
+                            </a>
+                            <a href="#"><FontAwesomeIcon icon={faBell} className={`"fas fa-lg" ${HeaderStyle.bellAnimation}`}/></a>
+                        </div>
+                    </div>
     );
 });
 

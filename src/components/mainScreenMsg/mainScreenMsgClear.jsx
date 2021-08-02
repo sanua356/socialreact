@@ -2,36 +2,19 @@ import React from 'react';
 import MainScrMsg from './styles/messagesChatArea.module.css';
 import MainScreenMsgInputForm from './MainScreenMsgInputForm';
 import MessagesChatPage from './MessagesChatPage';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
-import {faBell} from '@fortawesome/free-regular-svg-icons';
-function MessagesClear(props){
+import Header from './../Header/Header';
 
+function MessagesClear(props){
     return (
         <div className="workspace">
             <main className={MainScrMsg.Main}>
                 <div className={MainScrMsg.chatBlock}>  
-                    <div className={MainScrMsg.chatBlockHeader}>
-                        <div className={MainScrMsg.chatBlockHeaderRoomInfo}>
-                            <h3>Room: {props.roomID}</h3>
-                            <span>Users: 3</span>
-                        </div>
-
-                         {props.selectedMessagesLength >= 1 && 
-                         <span className={MainScrMsg.selectedMessagesCounter}
-                         >Messages selected: 
-                            <aside>
-                                {props.selectedMessagesLength}
-                            </aside>
-                        </span>}
-
-                        <div className={MainScrMsg.chatBlockHeaderControlsBtns}>
-                            <a href="#">
-                                <FontAwesomeIcon icon={faEllipsisH} className={"fas fa-lg"}/>
-                            </a>
-                            <a href="#"><FontAwesomeIcon icon={faBell} className={`"fas fa-lg" ${MainScrMsg.bellAnimation}`}/></a>
-                        </div>
-                    </div>
+                    <Header 
+                    {...props} 
+                    loadedFromMessagesPage = {true}
+                    headerTitle = {`Room: ${props.roomID}`}
+                    headerDescription = "Users: 3"
+                    />
                     <MessagesChatPage {...props}/>
                     <MainScreenMsgInputForm 
                     roomID = {props.roomID}
