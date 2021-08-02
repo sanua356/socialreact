@@ -221,7 +221,7 @@ export const getMessagesFromServerTC = (roomID, roomIsExists) => {
         );
       }
     } catch (error) {
-      console.log("Error connecting");
+      console.log("Опаааа... Пиздец.");
     }
   };
 };
