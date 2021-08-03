@@ -2,7 +2,7 @@ import React from 'react';
 import MainScrMsgStyle from './styles/messagesChatBubbles.module.css';
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserNinja, faUserSecret, faUserTie } from '@fortawesome/free-solid-svg-icons';
+import {faExclamationTriangle, faUserSecret, faUserTie } from '@fortawesome/free-solid-svg-icons';
 
 function messageSenderStyle(usernameSenderMessage, myUsername) {//Функция, которая добавляет класс, 
     //если сообщение в базе хранится не с ника пользователя (если оппонент, то класс, передвигающий сообщение вправо)
@@ -26,16 +26,16 @@ const getMessagesUIMap = ( //Отобразить сообщения с серв
         <div className = 
         {`${MainScrMsgStyle.message} 
           ${messageSenderStyle(message.messageSender, myUsername)}
+          ${message.errors && MainScrMsgStyle.errorMessage}
         `}
         key={messagesList.indexOf(message)} //Вешаются ключии для каждого сообщения, чтобы реакт лишний раз не делал ререндер
         >
             
             {message.messageSender === myUsername && <FontAwesomeIcon icon={faUserTie} className = {"fas fa-lg"}/>}
             <p
-                
                 className = 
                 {//Вешает класс для стилизации сообщения, (вправо или влево на экране) в завистимости от ответа функции
-                `${selectedMessagesArray.indexOf(message.id) !== -1 ? MainScrMsgStyle.selectedMessage: null}` //Вешает класс выбранног осообщения, если произошёл клик на него
+                `${selectedMessagesArray.indexOf(message.id) !== -1 && MainScrMsgStyle.selectedMessage}`
                 } 
                 onClick = {() => { if(message.messageSender === myUsername){
                     selectMessageFromChat(message.id);//Добавляет (если его нет) и удаляет (если он есть) ID с выбранным сообщением в массив выбранных сообщений 
@@ -43,6 +43,11 @@ const getMessagesUIMap = ( //Отобразить сообщения с серв
                 }}}
             >   
                 <span>{message.messageSender}</span>: {message.message} {/*Выводит отправителя и сообщение на экран */}
+                {message.errors 
+                    && <span className = {MainScrMsgStyle.errorMessageIcon} title="Message not sended">
+                    <FontAwesomeIcon icon ={faExclamationTriangle} className= "fas fa-md"/>
+                    </span>
+                }
             </p>
             {message.messageSender !== myUsername && <FontAwesomeIcon icon={faUserSecret} className = {"fas fa-lg"}/>}
         </div>

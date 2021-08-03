@@ -25,6 +25,7 @@
   display: flex;
   align-items: center;
 }
+
 .messagesList p {
   cursor: pointer;
   max-width: 25vw;
@@ -50,10 +51,30 @@
   margin-left: auto;
 }
 .message p {
+  position: relative;
   transition: 0.2s ease-in-out;
 }
 .message p.selectedMessage {
   transition: 0.2s ease-in-out;
   margin-left: 50px;
   box-shadow: 1px 2px 15px rgb(138, 137, 137);
+}
+.errorMessageIcon {
+  color: rgba(255, 0, 0, 0.342);
+  margin-left: 10px;
+}
+.errorMessageIcon[title]:hover:after {
+  content: attr(title);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  left: 110%;
+  white-space: nowrap;
+  height: 20px;
+  background-color: rgba(255, 0, 0, 0.856);
+  border: solid 1px #ffffff;
+  border-radius: 10px;
+  padding: 10px 15px;
+  color: #ffffff;
 }

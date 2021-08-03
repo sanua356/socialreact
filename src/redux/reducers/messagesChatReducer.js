@@ -86,6 +86,7 @@ export const messagesReducer = (state = initialState, action) => {
           dateTimeMessage: Date.now(),
           messageSender: action.username,
           message: action.message,
+          errors: action.errors,
         };
         stateCopy.messagesList.push(newMessage); //push в массив сообщений
         console.log("Message sended");
@@ -178,18 +179,34 @@ export const addNewMessageFromServerTC = (
   return (dispatch) => {
     messagesAPI
       .addNewMessageFromServer(roomID, myUsername, message, usernameSecretKey)
-      .then(
-        (response) =>
-          dispatch(
-            ADD_NEW_MESSAGE_FROM_DATA_BASE_AC(
-              errors,
-              myUsername,
-              roomID,
-              message,
-              response
-            )
-          ) //Добавить сообщение в локальный state); //Отправить запрос с данными сообщения на сервер
-      );
+      .then((response) => {
+        let serverResponse;
+        if (response.data !== "null") {
+          serverResponse = response.data;
+        } else {
+          serverResponse = "Oopps. Message not sended. Try again later.";
+        }
+        dispatch(
+          ADD_NEW_MESSAGE_FROM_DATA_BASE_AC(
+            errors,
+            myUsername,
+            roomID,
+            message,
+            serverResponse
+          )
+        ); //Добавить сообщение в локальный state); //Отправить запрос с данными сообщения на сервер
+      })
+      .catch(() => {
+        dispatch(
+          ADD_NEW_MESSAGE_FROM_DATA_BASE_AC(
+            "Oopps. Message not sended. Try again later.",
+            myUsername,
+            roomID,
+            message,
+            "Error"
+          )
+        );
+      });
   };
 };
 

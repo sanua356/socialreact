@@ -14,14 +14,9 @@ export const messagesAPI = {
           message: message,
           usernameSecretKey: usernameSecretKey,
         })
-        .then(
-          (response) => {
-            return response.data;
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
+        .then((response) => {
+          return response.data;
+        });
     }
   },
   getMessagesFromServer: async (roomID) => {

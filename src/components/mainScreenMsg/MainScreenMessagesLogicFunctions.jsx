@@ -39,7 +39,6 @@ const mapStateToProps = (state) =>{
 const mapDispatchToProps = (dispatch) =>{
     return{
         sendNewMessage: (errors, myUsername, roomID, message, usernameSecretKey) => {
-            console.log(errors, myUsername, roomID, message, usernameSecretKey);
             dispatch(addNewMessageFromServerTC(errors, myUsername, roomID, message, usernameSecretKey));
         },
         changeLoadingStatus: (loadingStatus) =>{
