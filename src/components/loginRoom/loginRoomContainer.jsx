@@ -3,7 +3,7 @@ import LoginRoomClear from './LoginRoomClear';
 import { SEND_LOGINROOM_DATA_AC, checkRoomExistsTC, CHANGE_CREATE_OR_LOGIN_STATUS_AC} from '../../redux/reducers/loginroomReducer';
 import { SAVE_ROOMID_AND_USERNAME_LOCALSTORAGE_AC } from '../../redux/reducers/mainReducer';
 import { connect } from 'react-redux';
-import { createNewRoomTC } from './../../redux/reducers/loginroomReducer';
+import { createNewRoomTC, SET_ERROR_MESSAGE_AC } from './../../redux/reducers/loginroomReducer';
     
 
 const mapStateToProps = (state) =>{
@@ -15,12 +15,14 @@ const mapStateToProps = (state) =>{
         loginBtnName: state.loginRoomPage.loginBtnName,
         loginBtnClickableStatus: state.loginRoomPage.loginBtnClickableStatus,
         roomIsExists: state.manyPages.roomIsExists,
-        roomExistsServerResponse: state.loginRoomPage.roomIsExistsServerResponse
+        roomExistsServerResponse: state.loginRoomPage.roomIsExistsServerResponse,
+        errors: state.loginRoomPage.errors
     }
 }
 const mapDispatchTopProps = (dispatch) => {
     return{
         sendDataFields: (usernameFieldValue, usernameSecretKeyFieldValue, roomIDFieldValue, createOrLoginStatus) => {
+            dispatch(SET_ERROR_MESSAGE_AC(""));
             dispatch(SEND_LOGINROOM_DATA_AC(usernameFieldValue, usernameSecretKeyFieldValue, roomIDFieldValue));
             dispatch(SAVE_ROOMID_AND_USERNAME_LOCALSTORAGE_AC());
             if(createOrLoginStatus){

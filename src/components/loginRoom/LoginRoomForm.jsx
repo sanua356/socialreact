@@ -8,18 +8,22 @@ import { faUser, faKey, faDoorClosed } from '@fortawesome/free-solid-svg-icons';
 import { useEffect } from 'react';
 
 export const LoginRoomForm = (props) => {
-
     const [formTouched, setFormTouched] = React.useState(false);
     const [showErrorExistsMessage, setShowErrorExistsMessage] = React.useState(false);
     const [changeCreateRoom, setChangeCreateRoom] = React.useState(false);
     React.useEffect(() => {
-        if(props.roomExistsServerResponse === null && formTouched){
+        console.log("effect");
+        if(props.errors){
             setShowErrorExistsMessage(true);
-        }else if(props.roomExistsServerResponse !== null && formTouched){
-            setShowErrorExistsMessage(false);
+        }else{
+            if(props.roomExistsServerResponse === null && formTouched){
+                setShowErrorExistsMessage(true);
+            }else if(props.roomExistsServerResponse !== null && formTouched){
+                setShowErrorExistsMessage(false);
+            }
         }
         
-    }, [props.roomExistsServerResponse])
+    }, [props.roomExistsServerResponse, formTouched, props.errors])
     
     useEffect(()=> {
         props.changeCreateOrLoginStatus(changeCreateRoom);
@@ -71,7 +75,7 @@ export const LoginRoomForm = (props) => {
 
                     {showErrorExistsMessage && !changeCreateRoom
                     ? <span className={LoginRoomStyle.messageFromDB}>
-                        Uncorrect data. Please, try again.
+                        {!props.errors ? "Uncorrect data. Please, try again." : props.errors}
                         </span> 
                     : null} {/*Если комната не была найдена в базе */}
 

@@ -9,6 +9,7 @@ const actionsNames = {
   CHANGE_ROOM_IS_EXISIS_SERVER_RESPONSE:
     "CHANGE_ROOM_IS_EXISIS_SERVER_RESPONSE",
   CHANGE_CREATE_OR_LOGIN_STATUS: "CHANGE_CREATE_OR_LOGIN_STATUS",
+  SET_ERROR_MESSAGE: "SET_ERROR_MESSAGE",
 };
 
 export function SEND_LOGINROOM_DATA_AC(
@@ -47,6 +48,13 @@ export function CHANGE_CREATE_OR_LOGIN_STATUS_AC(status) {
   };
 }
 
+export function SET_ERROR_MESSAGE_AC(errorMessage) {
+  return {
+    type: "SET_ERROR_MESSAGE",
+    errorMessage,
+  };
+}
+
 const initialState = {
   changedUsername: "", //Временная переменная, хранящая строку из input ввода ника
   changedRoomID: "", //Временная переменная, хранящая строку из input ввода RoomID
@@ -55,6 +63,7 @@ const initialState = {
   loginBtnName: "Login", //Переменная, хранящая текст внутри кнопки логина (нужна для вывода сообщения "Loggining...") во время ожидания ответа запроса к БД
   loginBtnClickableStatus: true, //Переменная для отключения кнопки, во время ожиданеия ответа от сервера к БД
   roomIsExistsServerResponse: "", //Переменная нужна для корректной работы вывода на экран ошибки, если комнаты нет
+  errors: "",
 };
 
 export const loginroomReducer = (state = initialState, action) => {
@@ -62,10 +71,10 @@ export const loginroomReducer = (state = initialState, action) => {
   let stateCopy = { ...state };
   switch (action.type) {
     case actionsNames.SEND_LOGINROOM_DATA: //Экшн, отвечающий за сохранение данных ника и RoomID в LocalStorage
-    localStorage.clear(); //Почистить хранилище от старых значений (если они есть) ника и RoomID
-    localStorage.setItem("username", action.usernameFieldValue); //Сохранить в хранилище ник
-    localStorage.setItem("roomID", action.roomIDFieldValue); //Сохранить в хранилище RoomID
-    localStorage.setItem(
+      localStorage.clear(); //Почистить хранилище от старых значений (если они есть) ника и RoomID
+      localStorage.setItem("username", action.usernameFieldValue); //Сохранить в хранилище ник
+      localStorage.setItem("roomID", action.roomIDFieldValue); //Сохранить в хранилище RoomID
+      localStorage.setItem(
         "usernameSecretKey",
         action.usernameSecretKeyFieldValue
       ); //Сохранить секретный ключ ника в хранлище
@@ -89,6 +98,10 @@ export const loginroomReducer = (state = initialState, action) => {
     case actionsNames.CHANGE_CREATE_OR_LOGIN_STATUS:
       stateCopy = { ...state };
       stateCopy.createOrLoginStatus = action.status;
+      return stateCopy;
+    case actionsNames.SET_ERROR_MESSAGE:
+      stateCopy = { ...state };
+      stateCopy.errors = action.errorMessage;
       return stateCopy;
     default:
       return state;
@@ -120,7 +133,9 @@ export const checkRoomExistsTC = () => {
       })
       .catch((error) => {
         //Если есть косяки при отправке запроса, вывести их на экран
-        console.log(error);
+        dispatch(CHANGE_ROOM_EXISTS_STATUS_AC(false));
+        dispatch(CHANGE_NAME_STATUS_LOGGINING_BTN_AC("Login", true));
+        dispatch(SET_ERROR_MESSAGE_AC("Not connection. Try again later."));
       });
   };
 };
