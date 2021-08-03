@@ -13,7 +13,7 @@ ReactDOM.render(
     <BrowserRouter>
       <Provider store={store}>
         <Redirect exact from="/" to="/login" />
-        <LogginingRouter store={store.getState()} />
+        <LogginingRouter store={store.getState()} dispatch={store.dispatch} />
       </Provider>
     </BrowserRouter>
   </React.StrictMode>,

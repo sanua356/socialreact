@@ -62,10 +62,10 @@ export const loginroomReducer = (state = initialState, action) => {
   let stateCopy = { ...state };
   switch (action.type) {
     case actionsNames.SEND_LOGINROOM_DATA: //Экшн, отвечающий за сохранение данных ника и RoomID в LocalStorage
-      localStorage.clear(); //Почистить хранилище от старых значений (если они есть) ника и RoomID
-      localStorage.setItem("username", action.usernameFieldValue); //Сохранить в хранилище ник
-      localStorage.setItem("roomID", action.roomIDFieldValue); //Сохранить в хранилище RoomID
-      localStorage.setItem(
+    localStorage.clear(); //Почистить хранилище от старых значений (если они есть) ника и RoomID
+    localStorage.setItem("username", action.usernameFieldValue); //Сохранить в хранилище ник
+    localStorage.setItem("roomID", action.roomIDFieldValue); //Сохранить в хранилище RoomID
+    localStorage.setItem(
         "usernameSecretKey",
         action.usernameSecretKeyFieldValue
       ); //Сохранить секретный ключ ника в хранлище

@@ -4,10 +4,10 @@ import { Route, Redirect } from 'react-router-dom';
 import Navbar from '../navbar/Navbar';
 //import Footer from '../Footer/Footer';
 import MessagesContainer from '../MainScreenMsg/MessagesContainer';
-import Logout from '../Logout/Logout';
 import Loader from '../CommonComponents/Loader/Loader';
 const Profile = React.lazy(() => import('../profile/Profile'));
 const Updates = React.lazy(() => import('../updates/Updates'));
+const Logout = React.lazy(() => import('../Logout/Logout'));
 
 function MainComponent(props) { //Компонент, который рендерится если пользователь залогинился в комнату
     return (
@@ -38,7 +38,9 @@ function MainComponent(props) { //Компонент, который ренде�
                         <MessagesContainer />
                     </Route>
                     <Route exact path="/logout">
-                        <Logout />
+                        <Suspense fallback = {<Loader lazyLoadComponent = {true}/>}>
+                            <Logout />
+                        </Suspense>
                     </Route>
                     {/* <Footer /> */}
                     <Redirect exact from="/" to="/messages" />{/*Редирект на страницу сообщений, если пользователь ввёл ссылку-белиберду*/}
