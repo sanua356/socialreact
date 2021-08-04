@@ -29,6 +29,18 @@ let MainScreenMsgInputForm = (props) => {//Компонента, которая 
     useEffect (() => { //Хук, срабатывающий если количество выбранных сообщений изменилось. Он вызывает другой хук, который enable\disable кнопки.
         setSelectedMessagesLength(props.selectedMessagesLength);
     }, [props.selectedMessagesLength])
+
+    useEffect (() => {
+        console.log("ERROR");
+        if(props.errorServerMessagesNotification){
+            store.addNotification({
+                ...notification,
+                title: "Error",
+                message: props.errorServerMessagesNotification
+            });
+            props.clearServerMessageAfterView();
+        } 
+    }, [props.errorServerMessagesNotification])
     
     const validationSchema = yup.object().shape({ //Схема валидации для поля ввода сообщений.
         messageTextarea: yup.string().typeError("This field should be string").required("Message field is empty")
@@ -40,7 +52,7 @@ let MainScreenMsgInputForm = (props) => {//Компонента, которая 
                 messageTextarea: '' //Временная переменная хранения данных из поля ввода сообщений
             }}
             onSubmit={(values, resetForm) => { //Функция, срабатывающая при нажатии на кнопку "Send message"
-                props.sendNewMessage(props.errors, props.username, props.roomID, values.messageTextarea, props.usernameSecretKey);
+                props.sendNewMessage(props.errors, props.username, props.roomID, values.messageTextarea, props.usernameSecretKey,  props.messagesListLength, props.errorServerMessagesNotification);
                 resetForm.setFieldValue('messageTextarea', '');
             }} //Функция отправки API к серверу с новым сообщением и отправка сообщения в UI
             validationSchema = {validationSchema} //Подключение схемы валидации к Формику

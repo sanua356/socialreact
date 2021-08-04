@@ -7,6 +7,8 @@ const actionsNames = {
   ADD_ERROR_MESSAGE: "ADD_ERROR_MESSAGE",
   SELECT_MESSAGE_FROM_CHAT: "SELECT_MESSAGE_FROM_CHAT",
   DELETE_MESSAGES_FROM_CHAT: "DELETE_MESSAGES_FROM_CHAT",
+  ADD_ERROR_SERVER_MESSAGE_NOTIFICATION:
+    "ADD_ERROR_SERVER_MESSAGE_NOTIFICATION",
 };
 
 export function ADD_NEW_MESSAGE_FROM_DATA_BASE_AC(
@@ -64,12 +66,22 @@ export function DELETE_MESSAGES_FROM_CHAT_AC() {
   };
 }
 
+export function ADD_ERROR_SERVER_MESSAGE_NOTIFICACTION_AC(
+  errorServerMessagesNotification
+) {
+  return {
+    type: "ADD_ERROR_SERVER_MESSAGE_NOTIFICATION",
+    errorServerMessagesNotification,
+  };
+}
+
 const initialState = {
   messagesList: [], //Массив списка сообщений, полученных с сервера для вывода в UI
   messagesEmptyStatusRoom: false, //Переменная, которая ставится в true, если с сервера пришла пустая комната без сообщений
   errors: "", //Переменная для вывода ошибок ввода на экран (если они возникают)
   isLoading: false, //Флаг показа GIF с Loader, пока выполняется запрос к серверу
   seletctedMessages: [], //Обьект в котором будут храниться ID сообщений для взаимодействия (Например удаление)
+  errorServerMessagesNotification: "",
 };
 
 export const messagesReducer = (state = initialState, action) => {
@@ -146,7 +158,13 @@ export const messagesReducer = (state = initialState, action) => {
         messagesList: [...state.messagesList],
         seletctedMessages: [...state.seletctedMessages],
       };
-      console.log(stateCopy.messagesList);
+      return stateCopy;
+    case actionsNames.ADD_ERROR_SERVER_MESSAGE_NOTIFICATION:
+      stateCopy = { ...state };
+      stateCopy.errorServerMessagesNotification =
+        action.errorServerMessagesNotification;
+      console.log(stateCopy);
+      return stateCopy;
       deleteMessagesFromServerTC(stateCopy.seletctedMessages);
       // for (let i = 0; i < stateCopy.seletctedMessages.length; i++) {
       //   for (let j = 0; j < stateCopy.messagesList.length; j++) {
@@ -174,17 +192,25 @@ export const addNewMessageFromServerTC = (
   myUsername,
   roomID,
   message,
-  usernameSecretKey
+  usernameSecretKey,
+  messagesListLength,
+  errorServerMessagesNotification
 ) => {
   return (dispatch) => {
+    let serverResponse, messageNotification;
     messagesAPI
-      .addNewMessageFromServer(roomID, myUsername, message, usernameSecretKey)
+      .addNewMessageFromServer(
+        roomID,
+        myUsername,
+        message,
+        usernameSecretKey,
+        messagesListLength
+      )
       .then((response) => {
-        let serverResponse;
         if (response.data !== "null") {
           serverResponse = response.data;
         } else {
-          serverResponse = "Oopps. Message not sended. Try again later.";
+          serverResponse = messagesListLength + 1;
         }
         dispatch(
           ADD_NEW_MESSAGE_FROM_DATA_BASE_AC(
@@ -203,8 +229,11 @@ export const addNewMessageFromServerTC = (
             myUsername,
             roomID,
             message,
-            "Error"
+            messagesListLength + 1
           )
+        );
+        dispatch(
+          ADD_ERROR_SERVER_MESSAGE_NOTIFICACTION_AC("Oopps. Message not sended. Try again later.")
         );
       });
   };

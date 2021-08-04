@@ -26,6 +26,9 @@ function MessagesClear(props){
                     selectedMessagesLength = {props.selectedMessagesLength}
                     deleteMessages = {props.deleteMessages}
                     usernameSecretKey = {props.usernameSecretKey}
+                    messagesListLength = {props.messagesListLength}
+                    errorServerMessagesNotification = {props.errorServerMessagesNotification}
+                    clearServerMessageAfterView = {props.clearServerMessageAfterView}
                     />
                 </div>
             </main>

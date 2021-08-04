@@ -4,7 +4,7 @@ import Loader from '../CommonComponents/Loader/Loader';
 import MainScreenMsgClear from "./MainScreenMsgClear";
 import { connect } from 'react-redux';
 import { CHANGE_LOADING_STATUS_AC, addNewMessageFromServerTC, DELETE_MESSAGES_FROM_CHAT_AC, deleteMessagesFromServerTC} from '../../redux/reducers/messagesChatReducer';
-import { SELECT_MESSAGE_FROM_CHAT_AC } from './../../redux/reducers/messagesChatReducer';
+import { SELECT_MESSAGE_FROM_CHAT_AC, ADD_ERROR_SERVER_MESSAGE_NOTIFICACTION_AC } from './../../redux/reducers/messagesChatReducer';
 
 function MainScreenMessagesLogicComponent(props) {
     //get array messages from file with map
@@ -33,7 +33,9 @@ const mapStateToProps = (state) =>{
         messagesEmptyStatus: state.messagesPage.messagesEmptyStatusRoom,
         selectedMessages: state.messagesPage.seletctedMessages,
         selectedMessagesLength: state.messagesPage.seletctedMessages.length,
-        usernameSecretKey: state.manyPages.usernameSecretKey
+        usernameSecretKey: state.manyPages.usernameSecretKey,
+        messagesListLength: state.messagesPage.messagesList.length,
+        errorServerMessagesNotification: state.messagesPage.errorServerMessagesNotification
     }
 }
 const mapDispatchToProps = (dispatch) =>{
@@ -48,9 +50,11 @@ const mapDispatchToProps = (dispatch) =>{
             dispatch(SELECT_MESSAGE_FROM_CHAT_AC(messageID));
         },
         deleteMessages: (roomID, messagesID) => {
-            console.log(roomID, messagesID);
             dispatch(deleteMessagesFromServerTC(roomID, messagesID));
             dispatch(DELETE_MESSAGES_FROM_CHAT_AC());
+        },
+        clearServerMessageAfterView: () => {
+            dispatch(ADD_ERROR_SERVER_MESSAGE_NOTIFICACTION_AC(''));
         }
     }
 }

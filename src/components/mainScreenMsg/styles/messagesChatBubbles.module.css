@@ -39,15 +39,20 @@
   margin: 10px 20px;
 }
 .messagesList .myMessage p {
+  background: rgb(230, 230, 230);
   margin-right: auto;
 }
 .messagesList .myMessage span {
-  color: red;
+  font-weight: 700;
+  color: rgb(87, 87, 255);
 }
 .messagesList .opponentMessage span {
-  color: blue;
+  font-weight: 700;
+  color: rgb(255, 251, 5);
 }
 .messagesList .opponentMessage p {
+  color: white;
+  background: rgb(13, 136, 252);
   margin-left: auto;
 }
 .message p {
