@@ -3,6 +3,7 @@ import NavbarStyle from './navbar.module.css'
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import UsernameIcon from "../../assets/Sidebar/username2.png";
+import { connect } from 'react-redux';
 
 
 function Navbar(props) {
@@ -20,7 +21,7 @@ function Navbar(props) {
         <div className={NavbarStyle.navbar}>
             <div className={NavbarStyle.userBlock}>
                 <img src={UsernameIcon} alt="username" />
-                <span>Your name: {props.myUsername}</span>
+                <span>Your name: {props.username}</span>
             </div>
             <nav>
                 <ul>
@@ -31,4 +32,12 @@ function Navbar(props) {
     );
 }
 
-export default Navbar;
+const mapStateToProps = (state) =>{
+    return {
+        username: state.manyPages.username,
+        sidebarMenuItems: state.sidebarPage.sidebarMenuItems
+    }
+}
+
+const NavbarContainer = connect(mapStateToProps, null)(Navbar);
+export default NavbarContainer;

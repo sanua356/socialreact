@@ -133,16 +133,16 @@ export const messagesReducer = (state = initialState, action) => {
             for (let i = 0; i < messagesArray.length; i++) {
               stateCopy.messagesList.push(messagesArray[i]); //Заполнить массив сообщений в state данными response с сервера
             }
-          // } else {
-          //   let loadedMessages = [];
-          //   for (let i = 0; i < messagesArray.length; i++) {
-          //     loadedMessages = loadedMessages.push(messagesArray[i]); //Заполнить массив сообщений в state данными response с сервера
-          //   }
-          //   stateCopy.messagesList = {
-          //     ...loadedMessages,
-          //     ...stateCopy.messagesList,
-          //   };
-          //   console.log(stateCopy.messagesList);
+            // } else {
+            //   let loadedMessages = [];
+            //   for (let i = 0; i < messagesArray.length; i++) {
+            //     loadedMessages = loadedMessages.push(messagesArray[i]); //Заполнить массив сообщений в state данными response с сервера
+            //   }
+            //   stateCopy.messagesList = {
+            //     ...loadedMessages,
+            //     ...stateCopy.messagesList,
+            //   };
+            //   console.log(stateCopy.messagesList);
           }
         } else {
           //Если сообщений не пришло (сервер вернул ответ, что сообщений нет)

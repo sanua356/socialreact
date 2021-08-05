@@ -31,7 +31,7 @@ const getMessagesUIMap = ( //Отобразить сообщения с серв
         key={messagesList.indexOf(message)} //Вешаются ключии для каждого сообщения, чтобы реакт лишний раз не делал ререндер
         >
             {message.messageSender === myUsername && <div className={MainScrMsgStyle.messageInfo}>
-                 <FontAwesomeIcon icon={faUserTie} className = {"fas fa-lg"}/>
+                <FontAwesomeIcon icon={faUserTie} className = {"fas fa-lg"}/>
                 <span className={MainScrMsgStyle.messageSender}>{message.messageSender}</span>
             </div>}
                 <p
