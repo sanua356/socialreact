@@ -31,7 +31,6 @@ let MainScreenMsgInputForm = (props) => {//Компонента, которая 
     }, [props.selectedMessagesLength])
 
     useEffect (() => {
-        console.log("ERROR");
         if(props.errorServerMessagesNotification){
             store.addNotification({
                 ...notification,
@@ -52,7 +51,7 @@ let MainScreenMsgInputForm = (props) => {//Компонента, которая 
                 messageTextarea: '' //Временная переменная хранения данных из поля ввода сообщений
             }}
             onSubmit={(values, resetForm) => { //Функция, срабатывающая при нажатии на кнопку "Send message"
-                props.sendNewMessage(props.errors, props.username, props.roomID, values.messageTextarea, props.usernameSecretKey,  props.messagesListLength, props.errorServerMessagesNotification);
+                props.sendNewMessage(props.errors, props.myUsername, props.roomID, values.messageTextarea, props.usernameSecretKey,  props.messagesListLength, props.errorServerMessagesNotification);
                 resetForm.setFieldValue('messageTextarea', '');
             }} //Функция отправки API к серверу с новым сообщением и отправка сообщения в UI
             validationSchema = {validationSchema} //Подключение схемы валидации к Формику

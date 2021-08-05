@@ -29,13 +29,19 @@ export function ADD_NEW_MESSAGE_FROM_DATA_BASE_AC(
   };
 }
 
-export function GET_MESSAGES_LIST_FROM_API_АС(roomID, messages, errors) {
+export function GET_MESSAGES_LIST_FROM_API_АС(
+  roomID,
+  messages,
+  errors,
+  firstMessageID
+) {
   //АС, который вызывается при переходе на страницу /messages для получения списка сообщений с сервера
   return {
     type: "GET_MESSAGES_LIST_FROM_API",
     roomID,
     messagesJSON: messages,
     errors,
+    firstMessageID,
   };
 }
 export function CHANGE_LOADING_STATUS_AC(loadingStatus) {
@@ -59,7 +65,6 @@ export function SELECT_MESSAGE_FROM_CHAT_AC(messageID) {
     messageID,
   };
 }
-
 export function DELETE_MESSAGES_FROM_CHAT_AC() {
   return {
     type: "DELETE_MESSAGES_FROM_CHAT",
@@ -82,6 +87,7 @@ const initialState = {
   isLoading: false, //Флаг показа GIF с Loader, пока выполняется запрос к серверу
   seletctedMessages: [], //Обьект в котором будут храниться ID сообщений для взаимодействия (Например удаление)
   errorServerMessagesNotification: "",
+  firstMessageID: null, //Переменная, в которой хранится ID первого загруженного сообщения (самого старого с сервера). Это нужно для дозагрузки сообщений с сервера относительно старого ID.
 };
 
 export const messagesReducer = (state = initialState, action) => {
@@ -113,15 +119,30 @@ export const messagesReducer = (state = initialState, action) => {
       }
     case actionsNames.GET_MESSAGES_LIST_FROM_API: //Если АС = получить список сообщений с сервера по введённой roomID
       stateCopy = { ...state, ...state.messagesList };
-      stateCopy.messagesList = []; //Очистить список старых сообщений (если они вообще есть)
+      console.log(action.firstMessageID);
+      if (!action.firstMessageID) stateCopy.messagesList = []; //Очистить список старых сообщений (если они вообще есть)
       stateCopy.errors = ""; //Очистить список ошибок (если они вообще есть)
       stateCopy.messagesEmptyStatusRoom = false;
       if (action.messagesJSON !== null) {
         //Если сообщения с сервера пришли (То есть если они вообще есть на сервере по введённому RoomID)
         if (action.messagesJSON !== "No messages") {
+          const messagesArray = action.messagesJSON.reverse();
+          stateCopy.firstMessageID = messagesArray[0].id;
           //Если с сервера пришло "No messages", значит сообщений точно нет
-          for (let i = 0; i < Object.keys(action.messagesJSON).length; i++) {
-            stateCopy.messagesList.push(action.messagesJSON[i]); //Заполнить массив сообщений в state данными response с сервера
+          if (!action.firstMessageID) {
+            for (let i = 0; i < messagesArray.length; i++) {
+              stateCopy.messagesList.push(messagesArray[i]); //Заполнить массив сообщений в state данными response с сервера
+            }
+          // } else {
+          //   let loadedMessages = [];
+          //   for (let i = 0; i < messagesArray.length; i++) {
+          //     loadedMessages = loadedMessages.push(messagesArray[i]); //Заполнить массив сообщений в state данными response с сервера
+          //   }
+          //   stateCopy.messagesList = {
+          //     ...loadedMessages,
+          //     ...stateCopy.messagesList,
+          //   };
+          //   console.log(stateCopy.messagesList);
           }
         } else {
           //Если сообщений не пришло (сервер вернул ответ, что сообщений нет)
@@ -131,11 +152,11 @@ export const messagesReducer = (state = initialState, action) => {
         //Если сообщений не пришло (косяк в коде)
         stateCopy.errors = true;
       }
+      console.log(stateCopy.messagesList);
       return stateCopy;
     case actionsNames.CHANGE_LOADING_STATUS: //Если АС = изменить статус показа Loader на экране
       stateCopy = { ...state };
       stateCopy.isLoading = action.loadingStatus; //Изменить флаг в state, значнием, пришедшим из action
-      console.log("Loading status changed", stateCopy.isLoading);
       return stateCopy;
     case actionsNames.ADD_ERROR_MESSAGE: //Если АС = появились ошибки при выполнении логики
       stateCopy = { ...state };
@@ -165,21 +186,8 @@ export const messagesReducer = (state = initialState, action) => {
         action.errorServerMessagesNotification;
       console.log(stateCopy);
       return stateCopy;
-      deleteMessagesFromServerTC(stateCopy.seletctedMessages);
-      // for (let i = 0; i < stateCopy.seletctedMessages.length; i++) {
-      //   for (let j = 0; j < stateCopy.messagesList.length; j++) {
-      //     const messageID = stateCopy.messagesList[j].id;
-      //     if (messageID === stateCopy.seletctedMessages[i]) {
-      //       console.log(
-      //         stateCopy.messagesList[j],
-      //         stateCopy.seletctedMessages[i]
-      //       );
-      //       stateCopy.messagesList.splice(stateCopy.messagesList[j], 1);
-      //     }
-      //   }
-      // }
-      // stateCopy.seletctedMessages = [];
-      // console.log(stateCopy.messagesList);
+    case actionsNames.LOAD_MORE_MESSAGES_FROM_SERVER:
+      stateCopy = { ...state };
       return stateCopy;
     default:
       return state;
@@ -193,11 +201,10 @@ export const addNewMessageFromServerTC = (
   roomID,
   message,
   usernameSecretKey,
-  messagesListLength,
-  errorServerMessagesNotification
+  messagesListLength
 ) => {
   return (dispatch) => {
-    let serverResponse, messageNotification;
+    let serverResponse;
     messagesAPI
       .addNewMessageFromServer(
         roomID,
@@ -233,13 +240,19 @@ export const addNewMessageFromServerTC = (
           )
         );
         dispatch(
-          ADD_ERROR_SERVER_MESSAGE_NOTIFICACTION_AC("Oopps. Message not sended. Try again later.")
+          ADD_ERROR_SERVER_MESSAGE_NOTIFICACTION_AC(
+            "Oopps. Message not sended. Try again later."
+          )
         );
       });
   };
 };
 
-export const getMessagesFromServerTC = (roomID, roomIsExists) => {
+export const getMessagesFromServerTC = (
+  roomID,
+  roomIsExists,
+  firstMessageID = null
+) => {
   //Thunk creator, посылающий запрос к API и получающий список сообщений по roomID
   return (dispatch) => {
     try {
@@ -247,10 +260,17 @@ export const getMessagesFromServerTC = (roomID, roomIsExists) => {
         //Если комната с таким RoomID вообще существует
         dispatch(CHANGE_LOADING_STATUS_AC(true)); //Включить Loader
         return messagesAPI
-          .getMessagesFromServer(roomID)
+          .getMessagesFromServer(roomID, firstMessageID)
           .then((response) => {
             //Послать запрос к API и когда получили ответ, отключить Loader и загрузить response в локальный state через dispatch
-            dispatch(GET_MESSAGES_LIST_FROM_API_АС(roomID, response.data));
+            dispatch(
+              GET_MESSAGES_LIST_FROM_API_АС(
+                roomID,
+                response.data,
+                "",
+                firstMessageID
+              )
+            );
             dispatch(CHANGE_LOADING_STATUS_AC(false));
           })
           .catch((error) => {

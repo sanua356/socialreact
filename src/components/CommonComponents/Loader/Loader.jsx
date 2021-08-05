@@ -3,7 +3,6 @@ import LoaderStyles from './LoaderStyles.module.css';
 import errorImg from "../../../assets/Loader/error.png";
 
 function Loader(props) {  
-    console.log(props);
     return (
         <div className={"workspace"}>
             <div className={`${LoaderStyles.dFlexScreenLoader} ${LoaderStyles.loader}`}>

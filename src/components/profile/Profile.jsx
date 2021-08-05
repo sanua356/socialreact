@@ -1,7 +1,8 @@
 import React from "react";
 import Header from './../Header/Header';
 
-function Profile(props) {
+
+function Profile(props) {    
     return (
         <div className='workspace'>
             <Header 

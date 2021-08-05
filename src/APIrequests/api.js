@@ -1,28 +1,33 @@
 import * as axios from "axios";
 
 export const messagesAPI = {
-  addNewMessageFromServer: async (
+  addNewMessageFromServer: (
     roomID,
     userSenderMessage,
     message,
     usernameSecretKey
   ) => {
     if (roomID && userSenderMessage && message) {
-      return await axios
-        .post(`http://socialreactapi/addnewmessage.php?roomid=${roomID}`, {
+      return axios.post(
+        `http://socialreactapi/addnewmessage.php?roomid=${roomID}`,
+        {
           userSenderMessage: userSenderMessage,
           message: message,
           usernameSecretKey: usernameSecretKey,
-        })
-        .then((response) => {
-          return response.data;
-        });
+        }
+      );
     }
   },
-  getMessagesFromServer: async (roomID) => {
-    return await axios.get(
-      `http://socialreactapi/roomsgetmessages.php?roomid=${roomID}`
-    );
+  getMessagesFromServer: async (roomID, firstMessageID) => {
+    if (firstMessageID === null) {
+      return await axios.get(
+        `http://socialreactapi/roomsgetmessages.php?roomid=${roomID}`
+      );
+    } else {
+      return await axios.get(
+        `http://socialreactapi/roomsgetmessages.php?roomid=${roomID}&firstmessageid=${firstMessageID}`
+      );
+    }
   },
   deleteMessages: async (roomID, messagesID) => {
     console.log(roomID, messagesID);

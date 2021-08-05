@@ -16,20 +16,7 @@ function MessagesClear(props){
                     headerDescription = "Users: 3"
                     />
                     <MessagesChatPage {...props}/>
-                    <MainScreenMsgInputForm 
-                    roomID = {props.roomID}
-                    username = {props.myUsername}
-                    errors = {props.errors}
-                    sendNewMessage = {props.sendNewMessage}
-                    deleteMessages = {props.deleteMessages}
-                    selectedMessages = {props.selectedMessages}
-                    selectedMessagesLength = {props.selectedMessagesLength}
-                    deleteMessages = {props.deleteMessages}
-                    usernameSecretKey = {props.usernameSecretKey}
-                    messagesListLength = {props.messagesListLength}
-                    errorServerMessagesNotification = {props.errorServerMessagesNotification}
-                    clearServerMessageAfterView = {props.clearServerMessageAfterView}
-                    />
+                    <MainScreenMsgInputForm {...props}/>
                 </div>
             </main>
         </div>

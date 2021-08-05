@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import Loader from '../CommonComponents/Loader/Loader';
 import MainScreenMsgClear from "./MainScreenMsgClear";
 import { connect } from 'react-redux';
-import { CHANGE_LOADING_STATUS_AC, addNewMessageFromServerTC, DELETE_MESSAGES_FROM_CHAT_AC, deleteMessagesFromServerTC} from '../../redux/reducers/messagesChatReducer';
+import { CHANGE_LOADING_STATUS_AC, addNewMessageFromServerTC, DELETE_MESSAGES_FROM_CHAT_AC, deleteMessagesFromServerTC, getMessagesFromServerTC} from '../../redux/reducers/messagesChatReducer';
 import { SELECT_MESSAGE_FROM_CHAT_AC, ADD_ERROR_SERVER_MESSAGE_NOTIFICACTION_AC } from './../../redux/reducers/messagesChatReducer';
 
 function MainScreenMessagesLogicComponent(props) {
@@ -20,7 +20,6 @@ function MainScreenMessagesLogicComponent(props) {
     )
 }
 
-
 const mapStateToProps = (state) =>{
     return{
         myUsername: state.manyPages.username,
@@ -35,7 +34,8 @@ const mapStateToProps = (state) =>{
         selectedMessagesLength: state.messagesPage.seletctedMessages.length,
         usernameSecretKey: state.manyPages.usernameSecretKey,
         messagesListLength: state.messagesPage.messagesList.length,
-        errorServerMessagesNotification: state.messagesPage.errorServerMessagesNotification
+        errorServerMessagesNotification: state.messagesPage.errorServerMessagesNotification,
+        firstMessageID: state.messagesPage.firstMessageID
     }
 }
 const mapDispatchToProps = (dispatch) =>{
@@ -55,6 +55,9 @@ const mapDispatchToProps = (dispatch) =>{
         },
         clearServerMessageAfterView: () => {
             dispatch(ADD_ERROR_SERVER_MESSAGE_NOTIFICACTION_AC(''));
+        },
+        loadMoreMessages: (roomID, roomIsExists, firstMessageID) => {
+            dispatch(getMessagesFromServerTC(roomID, roomIsExists, firstMessageID));
         }
     }
 }

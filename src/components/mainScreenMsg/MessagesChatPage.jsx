@@ -82,12 +82,16 @@ const MessagesChatPage = React.memo((props) => { //Компонента, кот�
             }
             
         }, [props.messagesList]); //Скролл чата вниз, когда отправилось или удалилось сообщение
-
     return (
         <>
         {props.messagesEmptyStatus 
         ? <span className = {MainScrMsgStyle.errors}>No saved messages from room.</span> 
-        : <div className={MainScrMsgStyle.messagesList} ref ={chatScreen}> 
+        : <div className={MainScrMsgStyle.messagesList} ref ={chatScreen}>
+            <button 
+            type = "button" 
+            className ={MainScrMsgStyle.loadMoreBtn} 
+            onClick={() => props.loadMoreMessages(props.roomID, props.roomIsExists, props.firstMessageID)}
+            >Load more messages</button>
             {messages}{/* render all messages from mapped array */}
         </div>}
         </>
