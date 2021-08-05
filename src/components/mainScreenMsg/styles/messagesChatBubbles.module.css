@@ -22,7 +22,7 @@
 }
 .message {
   display: flex;
-  align-items: center;
+  align-items: baseline;
 }
 
 .messagesList p {
@@ -37,22 +37,30 @@
   background: white;
   margin: 10px 20px;
 }
-.messagesList .myMessage p {
-  background: rgb(230, 230, 230);
+.messagesList .myMessage > p {
   margin-right: auto;
 }
-.messagesList .myMessage span {
+.messagesList .myMessage p {
+  background: rgb(230, 230, 230);
+}
+/* .messagesList .myMessage span {
   font-weight: 700;
   color: rgb(87, 87, 255);
 }
 .messagesList .opponentMessage span {
   font-weight: 700;
   color: rgb(255, 251, 5);
+} */
+.messagesList .opponentMessage > p {
+  margin-left: auto;
 }
 .messagesList .opponentMessage p {
   color: white;
   background: rgb(13, 136, 252);
-  margin-left: auto;
+}
+.messageSender {
+  font-size: 13px;
+  color: rgb(49, 49, 49);
 }
 .message p {
   position: relative;
@@ -62,6 +70,11 @@
   transition: 0.2s ease-in-out;
   margin-left: 50px;
   box-shadow: 1px 2px 15px rgb(138, 137, 137);
+}
+.messageInfo {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 .errorMessageIcon svg {
   color: rgba(255, 0, 0, 0.856);

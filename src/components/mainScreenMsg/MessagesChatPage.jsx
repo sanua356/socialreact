@@ -30,26 +30,32 @@ const getMessagesUIMap = ( //Отобразить сообщения с серв
         `}
         key={messagesList.indexOf(message)} //Вешаются ключии для каждого сообщения, чтобы реакт лишний раз не делал ререндер
         >
-            
-            {message.messageSender === myUsername && <FontAwesomeIcon icon={faUserTie} className = {"fas fa-lg"}/>}
-            <p
-                className = 
-                {//Вешает класс для стилизации сообщения, (вправо или влево на экране) в завистимости от ответа функции
-                `${selectedMessagesArray.indexOf(message.id) !== -1 && MainScrMsgStyle.selectedMessage}`
-                } 
-                onClick = {() => { if(message.messageSender === myUsername){
-                    selectMessageFromChat(message.id);//Добавляет (если его нет) и удаляет (если он есть) ID с выбранным сообщением в массив выбранных сообщений 
-                    setMessageSelected(!messageSelected); //Меняет состояние хука выбранного сообщения, чтобы раюотала стилизация подстветки
-                }}}
-            >   
-                <span>{message.messageSender}</span>: {message.message} {/*Выводит отправителя и сообщение на экран */}
-                {message.errors 
-                    && <span className = {MainScrMsgStyle.errorMessageIcon} title="Message not sended">
-                    <FontAwesomeIcon icon ={faExclamationTriangle} className= "fas fa-md"/>
-                    </span>
+            {message.messageSender === myUsername && <div className={MainScrMsgStyle.messageInfo}>
+                 <FontAwesomeIcon icon={faUserTie} className = {"fas fa-lg"}/>
+                <span className={MainScrMsgStyle.messageSender}>{message.messageSender}</span>
+            </div>}
+                <p
+                    className = 
+                    {//Вешает класс для стилизации сообщения, (вправо или влево на экране) в завистимости от ответа функции
+                    `${selectedMessagesArray.indexOf(message.id) !== -1 && MainScrMsgStyle.selectedMessage}`
+                    } 
+                    onClick = {() => { if(message.messageSender === myUsername){
+                        selectMessageFromChat(message.id);//Добавляет (если его нет) и удаляет (если он есть) ID с выбранным сообщением в массив выбранных сообщений 
+                        setMessageSelected(!messageSelected); //Меняет состояние хука выбранного сообщения, чтобы раюотала стилизация подстветки
+                    }}}
+                >   
+                    {message.message} {/*Выводит отправителя и сообщение на экран */}
+                    {message.errors 
+                        && <span className = {MainScrMsgStyle.errorMessageIcon} title="Message not sended">
+                        <FontAwesomeIcon icon ={faExclamationTriangle} className= "fas fa-md"/>
+                        </span>
+                    }
+                </p>
+                {message.messageSender !== myUsername && <div className={MainScrMsgStyle.messageInfo}>
+                    <FontAwesomeIcon icon={faUserSecret} className = {"fas fa-lg"}/>
+                    <span className={MainScrMsgStyle.messageSender}>{message.messageSender}</span>
+                </div>
                 }
-            </p>
-            {message.messageSender !== myUsername && <FontAwesomeIcon icon={faUserSecret} className = {"fas fa-lg"}/>}
         </div>
         
         );
