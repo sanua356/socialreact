@@ -19,7 +19,9 @@
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
   height: auto;
 }
-
+.controlsBtns textarea:focus {
+  box-shadow: 1px 3px 15px rgba(0, 0, 0, 0.2);
+}
 .controlsBtns button {
   font-family: "Nunito", sans-serif;
   transition: 0.2s ease-in-out;

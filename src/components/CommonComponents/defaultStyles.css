@@ -8,6 +8,15 @@ html {
   margin: 0;
   box-sizing: border-box;
 }
+input {
+  outline: none;
+}
+:active,
+:hover,
+:focus {
+  outline: 0;
+  outline-offset: 0;
+}
 .mainScreen {
   width: 100vw;
   height: 100vh;

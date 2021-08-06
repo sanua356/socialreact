@@ -1,3 +1,4 @@
+import { date } from "yup";
 import { messagesAPI } from "../../APIrequests/api"; //Импорт обьекта с асинхронщиной к серверу для страницы сообщений
 const actionsNames = {
   //Обьект с константами для вызова Action Creater
@@ -33,7 +34,8 @@ export function GET_MESSAGES_LIST_FROM_API_АС(
   roomID,
   messages,
   errors,
-  firstMessageID
+  firstMessageID,
+  loadedMessagesArrayLength
 ) {
   //АС, который вызывается при переходе на страницу /messages для получения списка сообщений с сервера
   return {
@@ -42,6 +44,7 @@ export function GET_MESSAGES_LIST_FROM_API_АС(
     messagesJSON: messages,
     errors,
     firstMessageID,
+    loadedMessagesArrayLength,
   };
 }
 export function CHANGE_LOADING_STATUS_AC(loadingStatus) {
@@ -88,6 +91,7 @@ const initialState = {
   seletctedMessages: [], //Обьект в котором будут храниться ID сообщений для взаимодействия (Например удаление)
   errorServerMessagesNotification: "",
   firstMessageID: null, //Переменная, в которой хранится ID первого загруженного сообщения (самого старого с сервера). Это нужно для дозагрузки сообщений с сервера относительно старого ID.
+  loadedMessagesArrayLength: 0, //Переменная, в которой хранится длина массива дозагруженных сообщений с сервера (нужна для скрытия/отображения кнопкп load more messages)
 };
 
 export const messagesReducer = (state = initialState, action) => {
@@ -105,6 +109,7 @@ export const messagesReducer = (state = initialState, action) => {
           messageSender: action.username,
           message: action.message,
           errors: action.errors,
+          messageOwnership: "me",
         };
         stateCopy.messagesList.push(newMessage); //push в массив сообщений
         console.log("Message sended");
@@ -119,30 +124,30 @@ export const messagesReducer = (state = initialState, action) => {
       }
     case actionsNames.GET_MESSAGES_LIST_FROM_API: //Если АС = получить список сообщений с сервера по введённой roomID
       stateCopy = { ...state, ...state.messagesList };
-      console.log(action.firstMessageID);
       if (!action.firstMessageID) stateCopy.messagesList = []; //Очистить список старых сообщений (если они вообще есть)
       stateCopy.errors = ""; //Очистить список ошибок (если они вообще есть)
       stateCopy.messagesEmptyStatusRoom = false;
+      stateCopy.loadedMessagesArrayLength = action.loadedMessagesArrayLength;
       if (action.messagesJSON !== null) {
         //Если сообщения с сервера пришли (То есть если они вообще есть на сервере по введённому RoomID)
         if (action.messagesJSON !== "No messages") {
           const messagesArray = action.messagesJSON.reverse();
+          console.log(messagesArray);
           stateCopy.firstMessageID = messagesArray[0].id;
           //Если с сервера пришло "No messages", значит сообщений точно нет
           if (!action.firstMessageID) {
             for (let i = 0; i < messagesArray.length; i++) {
               stateCopy.messagesList.push(messagesArray[i]); //Заполнить массив сообщений в state данными response с сервера
             }
-            // } else {
-            //   let loadedMessages = [];
-            //   for (let i = 0; i < messagesArray.length; i++) {
-            //     loadedMessages = loadedMessages.push(messagesArray[i]); //Заполнить массив сообщений в state данными response с сервера
-            //   }
-            //   stateCopy.messagesList = {
-            //     ...loadedMessages,
-            //     ...stateCopy.messagesList,
-            //   };
-            //   console.log(stateCopy.messagesList);
+          } else {
+            let loadedMessages = [];
+            for (let i = 0; i < messagesArray.length; i++) {
+              loadedMessages.push(messagesArray[i]); //Заполнить массив сообщений в state данными response с сервера
+            }
+            stateCopy.messagesList = [
+              ...loadedMessages,
+              ...stateCopy.messagesList,
+            ];
           }
         } else {
           //Если сообщений не пришло (сервер вернул ответ, что сообщений нет)
@@ -152,7 +157,6 @@ export const messagesReducer = (state = initialState, action) => {
         //Если сообщений не пришло (косяк в коде)
         stateCopy.errors = true;
       }
-      console.log(stateCopy.messagesList);
       return stateCopy;
     case actionsNames.CHANGE_LOADING_STATUS: //Если АС = изменить статус показа Loader на экране
       stateCopy = { ...state };
@@ -185,9 +189,6 @@ export const messagesReducer = (state = initialState, action) => {
       stateCopy.errorServerMessagesNotification =
         action.errorServerMessagesNotification;
       console.log(stateCopy);
-      return stateCopy;
-    case actionsNames.LOAD_MORE_MESSAGES_FROM_SERVER:
-      stateCopy = { ...state };
       return stateCopy;
     default:
       return state;
@@ -251,7 +252,9 @@ export const addNewMessageFromServerTC = (
 export const getMessagesFromServerTC = (
   roomID,
   roomIsExists,
-  firstMessageID = null
+  myUsername,
+  firstMessageID = null,
+  usernameSecretKey
 ) => {
   //Thunk creator, посылающий запрос к API и получающий список сообщений по roomID
   return (dispatch) => {
@@ -260,7 +263,12 @@ export const getMessagesFromServerTC = (
         //Если комната с таким RoomID вообще существует
         dispatch(CHANGE_LOADING_STATUS_AC(true)); //Включить Loader
         return messagesAPI
-          .getMessagesFromServer(roomID, firstMessageID)
+          .getMessagesFromServer(
+            roomID,
+            firstMessageID,
+            myUsername,
+            usernameSecretKey
+          )
           .then((response) => {
             //Послать запрос к API и когда получили ответ, отключить Loader и загрузить response в локальный state через dispatch
             dispatch(
@@ -268,7 +276,8 @@ export const getMessagesFromServerTC = (
                 roomID,
                 response.data,
                 "",
-                firstMessageID
+                firstMessageID,
+                response.data.length
               )
             );
             dispatch(CHANGE_LOADING_STATUS_AC(false));

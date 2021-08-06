@@ -18,14 +18,14 @@ export const messagesAPI = {
       );
     }
   },
-  getMessagesFromServer: async (roomID, firstMessageID) => {
+  getMessagesFromServer: async (roomID, firstMessageID, myUsername, usernameSecretKey) => {
     if (firstMessageID === null) {
       return await axios.get(
-        `http://socialreactapi/roomsgetmessages.php?roomid=${roomID}`
+        `http://socialreactapi/roomsgetmessages.php?roomid=${roomID}&username=${myUsername}&usernamesecretkey=${usernameSecretKey}`
       );
     } else {
       return await axios.get(
-        `http://socialreactapi/roomsgetmessages.php?roomid=${roomID}&firstmessageid=${firstMessageID}`
+        `http://socialreactapi/roomsgetmessages.php?roomid=${roomID}&firstmessageid=${firstMessageID}&username=${myUsername}&usernamesecretkey=${usernameSecretKey}`
       );
     }
   },

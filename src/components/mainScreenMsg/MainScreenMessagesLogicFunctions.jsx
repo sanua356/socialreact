@@ -10,7 +10,7 @@ function MainScreenMessagesLogicComponent(props) {
     //get array messages from file with map
     useEffect(() => {
         if(props.messagesList <= 0){
-            props.getMessagesFromServerTC(props.roomID, props.roomIsExists);
+            props.getMessagesFromServerTC(props.roomID, props.roomIsExists, null, props.myUsername, props.usernameSecretKey);
         }
     }, []) //get messages from server API 
     return(
@@ -35,7 +35,8 @@ const mapStateToProps = (state) =>{
         usernameSecretKey: state.manyPages.usernameSecretKey,
         messagesListLength: state.messagesPage.messagesList.length,
         errorServerMessagesNotification: state.messagesPage.errorServerMessagesNotification,
-        firstMessageID: state.messagesPage.firstMessageID
+        firstMessageID: state.messagesPage.firstMessageID,
+        loadedMessagesArrayLength: state.messagesPage.loadedMessagesArrayLength
     }
 }
 const mapDispatchToProps = (dispatch) =>{
@@ -56,8 +57,8 @@ const mapDispatchToProps = (dispatch) =>{
         clearServerMessageAfterView: () => {
             dispatch(ADD_ERROR_SERVER_MESSAGE_NOTIFICACTION_AC(''));
         },
-        loadMoreMessages: (roomID, roomIsExists, firstMessageID) => {
-            dispatch(getMessagesFromServerTC(roomID, roomIsExists, firstMessageID));
+        loadMoreMessages: (roomID, roomIsExists, myUsername, firstMessageID, usernameSecretKey) => {
+            dispatch(getMessagesFromServerTC(roomID, roomIsExists, myUsername, firstMessageID, usernameSecretKey));
         }
     }
 }

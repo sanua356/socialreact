@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faExclamationTriangle, faUserSecret, faUserTie } from '@fortawesome/free-solid-svg-icons';
 
-function messageSenderStyle(usernameSenderMessage, myUsername) {//Функция, которая добавляет класс, 
+function messageSenderStyle(messageOwnership) {//Функция, которая добавляет класс, 
     //если сообщение в базе хранится не с ника пользователя (если оппонент, то класс, передвигающий сообщение вправо)
-    if (myUsername === usernameSenderMessage) {
+    if (messageOwnership === "me") {
         return MainScrMsgStyle.myMessage; //Вернуть класс, двигающий сообщение влево, если ник совпадает с моим
     } else {
         return MainScrMsgStyle.opponentMessage;//Вернуть класс, двигающий сообщение вправо, если ник не совпадает с моим
@@ -25,12 +25,12 @@ const getMessagesUIMap = ( //Отобразить сообщения с серв
         const mappedMessagesArray = messagesList.map((message) => //Преобразуем массив обьектов сообщений в массив JSX элементов
         <div className = 
         {`${MainScrMsgStyle.message} 
-          ${messageSenderStyle(message.messageSender, myUsername)}
+          ${messageSenderStyle(message.messageOwnership)}
           ${message.errors && MainScrMsgStyle.errorMessage}
         `}
         key={messagesList.indexOf(message)} //Вешаются ключии для каждого сообщения, чтобы реакт лишний раз не делал ререндер
         >
-            {message.messageSender === myUsername && <div className={MainScrMsgStyle.messageInfo}>
+            {message.messageOwnership === 'me' && <div className={MainScrMsgStyle.messageInfo}>
                 <FontAwesomeIcon icon={faUserTie} className = {"fas fa-lg"}/>
                 <span className={MainScrMsgStyle.messageSender}>{message.messageSender}</span>
             </div>}
@@ -39,7 +39,7 @@ const getMessagesUIMap = ( //Отобразить сообщения с серв
                     {//Вешает класс для стилизации сообщения, (вправо или влево на экране) в завистимости от ответа функции
                     `${selectedMessagesArray.indexOf(message.id) !== -1 && MainScrMsgStyle.selectedMessage}`
                     } 
-                    onClick = {() => { if(message.messageSender === myUsername){
+                    onClick = {() => { if(message.messageOwnership === 'me'){
                         selectMessageFromChat(message.id);//Добавляет (если его нет) и удаляет (если он есть) ID с выбранным сообщением в массив выбранных сообщений 
                         setMessageSelected(!messageSelected); //Меняет состояние хука выбранного сообщения, чтобы раюотала стилизация подстветки
                     }}}
@@ -51,7 +51,7 @@ const getMessagesUIMap = ( //Отобразить сообщения с серв
                         </span>
                     }
                 </p>
-                {message.messageSender !== myUsername && <div className={MainScrMsgStyle.messageInfo}>
+                {message.messageOwnership === 'opponent' && <div className={MainScrMsgStyle.messageInfo}>
                     <FontAwesomeIcon icon={faUserSecret} className = {"fas fa-lg"}/>
                     <span className={MainScrMsgStyle.messageSender}>{message.messageSender}</span>
                 </div>
@@ -93,11 +93,12 @@ const MessagesChatPage = React.memo((props) => { //Компонента, кот�
         {props.messagesEmptyStatus 
         ? <span className = {MainScrMsgStyle.errors}>No saved messages from room.</span> 
         : <div className={MainScrMsgStyle.messagesList} ref ={chatScreen}>
-            <button 
+            {props.loadedMessagesArrayLength >= 10 ? <button 
             type = "button" 
             className ={MainScrMsgStyle.loadMoreBtn} 
-            onClick={() => props.loadMoreMessages(props.roomID, props.roomIsExists, props.firstMessageID)}
-            >Load more messages</button>
+            onClick={() => props.loadMoreMessages(props.roomID, props.roomIsExists, props.myUsername, props.firstMessageID, props.usernameSecretKey)}
+            >Load more messages</button> 
+            : null}
             {messages}{/* render all messages from mapped array */}
         </div>}
         </>

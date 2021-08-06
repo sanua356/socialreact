@@ -6,6 +6,7 @@ import { getMessagesFromServerTC } from '../../redux/reducers/messagesChatReduce
 const mapStateToProps = (state) =>{
     return{
         myUsername: state.manyPages.username,
+        usernameSecretKey: state.manyPages.usernameSecretKey,
         roomID: state.manyPages.roomID,
         isLoading: state.messagesPage.isLoading,
         roomIsExists: state.manyPages.roomIsExists,
@@ -15,8 +16,8 @@ const mapStateToProps = (state) =>{
 }
 const mapDispatchToProps = (dispatch) =>{
     return{
-        getMessagesFromServerTC: (roomID, roomIsExists) =>{
-            dispatch(getMessagesFromServerTC(roomID, roomIsExists));   
+        getMessagesFromServerTC: (roomID, roomIsExists, myUsername, firstMessageID, usernameSecretKey) =>{
+            dispatch(getMessagesFromServerTC(roomID, roomIsExists, firstMessageID, myUsername, usernameSecretKey));   
         },
     }
 }
