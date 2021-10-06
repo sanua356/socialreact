@@ -1,5 +1,5 @@
-import { date } from "yup";
 import { messagesAPI } from "../../APIrequests/api"; //Импорт обьекта с асинхронщиной к серверу для страницы сообщений
+import socket from "../../webSocket/socketConnect";
 const actionsNames = {
   //Обьект с константами для вызова Action Creater
   ADD_NEW_MESSAGE_FROM_DATA_BASE: "ADD_NEW_MESSAGE_FROM_DATA_BASE",
@@ -10,6 +10,7 @@ const actionsNames = {
   DELETE_MESSAGES_FROM_CHAT: "DELETE_MESSAGES_FROM_CHAT",
   ADD_ERROR_SERVER_MESSAGE_NOTIFICATION:
     "ADD_ERROR_SERVER_MESSAGE_NOTIFICATION",
+  SET_USERS_COUNT: "SET_USERS_COUNT",
 };
 
 export function ADD_NEW_MESSAGE_FROM_DATA_BASE_AC(
@@ -17,7 +18,8 @@ export function ADD_NEW_MESSAGE_FROM_DATA_BASE_AC(
   username,
   roomID,
   message,
-  messageID
+  messageID,
+  messageOwner
 ) {
   //AC, возникающий при клике на кнопку "Send message" (или нажатие Enter) на странице чата
   return {
@@ -27,6 +29,7 @@ export function ADD_NEW_MESSAGE_FROM_DATA_BASE_AC(
     roomID,
     message,
     messageID,
+    messageOwner,
   };
 }
 
@@ -82,7 +85,12 @@ export function ADD_ERROR_SERVER_MESSAGE_NOTIFICACTION_AC(
     errorServerMessagesNotification,
   };
 }
-
+export function SET_USERS_COUNT_AC(usersCount) {
+  return {
+    type: "SET_USERS_COUNT",
+    usersCount,
+  };
+}
 const initialState = {
   messagesList: [], //Массив списка сообщений, полученных с сервера для вывода в UI
   messagesEmptyStatusRoom: false, //Переменная, которая ставится в true, если с сервера пришла пустая комната без сообщений
@@ -92,6 +100,7 @@ const initialState = {
   errorServerMessagesNotification: "",
   firstMessageID: null, //Переменная, в которой хранится ID первого загруженного сообщения (самого старого с сервера). Это нужно для дозагрузки сообщений с сервера относительно старого ID.
   loadedMessagesArrayLength: 0, //Переменная, в которой хранится длина массива дозагруженных сообщений с сервера (нужна для скрытия/отображения кнопкп load more messages)
+  usersCount: 0,
 };
 
 export const messagesReducer = (state = initialState, action) => {
@@ -101,6 +110,10 @@ export const messagesReducer = (state = initialState, action) => {
       stateCopy = { ...state, messagesList: [...state.messagesList] };
       //Если нет ошибок ввода
       if (action.message) {
+        let messageOwnership = "opponent";
+        if (action.messageOwner === "me") {
+          messageOwnership = "me";
+        }
         //Если поле ввода сообщений не пусто
         const newMessage = {
           //Формирует обьект с новым сообщением и push его в массив сообщений state
@@ -109,7 +122,7 @@ export const messagesReducer = (state = initialState, action) => {
           messageSender: action.username,
           message: action.message,
           errors: action.errors,
-          messageOwnership: "me",
+          messageOwnership: messageOwnership,
         };
         stateCopy.messagesList.push(newMessage); //push в массив сообщений
         console.log("Message sended");
@@ -190,6 +203,11 @@ export const messagesReducer = (state = initialState, action) => {
         action.errorServerMessagesNotification;
       console.log(stateCopy);
       return stateCopy;
+    case actionsNames.SET_USERS_COUNT:
+      return {
+        ...state,
+        usersCount: action.usersCount,
+      };
     default:
       return state;
   }
@@ -217,6 +235,13 @@ export const addNewMessageFromServerTC = (
       .then((response) => {
         if (response.data !== "null") {
           serverResponse = response.data;
+          socket.emit("ROOM:NEW_MESSAGE", {
+            roomID,
+            username: myUsername,
+            usernameSecretKey,
+            text: message,
+            messageID: serverResponse,
+          });
         } else {
           serverResponse = messagesListLength + 1;
         }
@@ -226,7 +251,8 @@ export const addNewMessageFromServerTC = (
             myUsername,
             roomID,
             message,
-            serverResponse
+            serverResponse,
+            "me"
           )
         ); //Добавить сообщение в локальный state); //Отправить запрос с данными сообщения на сервер
       })
@@ -237,7 +263,8 @@ export const addNewMessageFromServerTC = (
             myUsername,
             roomID,
             message,
-            messagesListLength + 1
+            messagesListLength + 1,
+            "me"
           )
         );
         dispatch(

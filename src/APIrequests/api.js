@@ -1,4 +1,5 @@
 import * as axios from "axios";
+const hash = require("object-hash");
 
 export const messagesAPI = {
   addNewMessageFromServer: (
@@ -18,7 +19,12 @@ export const messagesAPI = {
       );
     }
   },
-  getMessagesFromServer: async (roomID, firstMessageID, myUsername, usernameSecretKey) => {
+  getMessagesFromServer: async (
+    roomID,
+    firstMessageID,
+    myUsername,
+    usernameSecretKey
+  ) => {
     if (firstMessageID === null) {
       return await axios.get(
         `http://socialreactapi/roomsgetmessages.php?roomid=${roomID}&username=${myUsername}&usernamesecretkey=${usernameSecretKey}`
@@ -54,5 +60,13 @@ export const loginAPI = {
     return await axios.get(
       `http://socialreactapi/createnewroom.php?roomid=${roomID}`
     );
+  },
+  webSocketConnect: (roomID, username, usernameSecretKey) => {
+    const payload = {
+      roomID: roomID,
+      username: username,
+      usernameSecretKey: hash.MD5(usernameSecretKey),
+    };
+    return axios.post("/rooms", payload);
   },
 };

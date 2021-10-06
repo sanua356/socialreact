@@ -19,7 +19,7 @@ function LogginingRouter(props){
 
 let mapStateToProps = (state) =>{
     return{
-        roomIsExists: state.manyPages.roomIsExists
+        roomIsExists: state.manyPages.roomIsExists,
     }
 }
 

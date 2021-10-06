@@ -13,7 +13,7 @@ function MessagesClear(props){
                     {...props} 
                     loadedFromMessagesPage = {true}
                     headerTitle = {`Room: ${props.roomID}`}
-                    headerDescription = "Users: 3"
+                    headerDescription = {`Users: ${props.usersCount} `}
                     />
                     <MessagesChatPage {...props}/>
                     <MainScreenMsgInputForm {...props}/>

@@ -12,7 +12,6 @@ export const LoginRoomForm = (props) => {
     const [showErrorExistsMessage, setShowErrorExistsMessage] = React.useState(false);
     const [changeCreateRoom, setChangeCreateRoom] = React.useState(false);
     React.useEffect(() => {
-        console.log("effect");
         if(props.errors){
             setShowErrorExistsMessage(true);
         }else{

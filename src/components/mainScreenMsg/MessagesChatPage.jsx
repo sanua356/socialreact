@@ -27,7 +27,8 @@ const getMessagesUIMap = ( //Отобразить сообщения с серв
         {`${MainScrMsgStyle.message} 
           ${messageSenderStyle(message.messageOwnership)}
           ${message.errors && MainScrMsgStyle.errorMessage}
-        `}
+          ${selectedMessagesArray.indexOf(message.id) !== -1 && MainScrMsgStyle.selectedMessage}`//Вешает класс для стилизации сообщения, (вправо или влево на экране) в завистимости от ответа функции
+        }
         key={messagesList.indexOf(message)} //Вешаются ключии для каждого сообщения, чтобы реакт лишний раз не делал ререндер
         >
             {message.messageOwnership === 'me' && <div className={MainScrMsgStyle.messageInfo}>
@@ -35,10 +36,6 @@ const getMessagesUIMap = ( //Отобразить сообщения с серв
                 <span className={MainScrMsgStyle.messageSender}>{message.messageSender}</span>
             </div>}
                 <p
-                    className = 
-                    {//Вешает класс для стилизации сообщения, (вправо или влево на экране) в завистимости от ответа функции
-                    `${selectedMessagesArray.indexOf(message.id) !== -1 && MainScrMsgStyle.selectedMessage}`
-                    } 
                     onClick = {() => { if(message.messageOwnership === 'me'){
                         selectMessageFromChat(message.id);//Добавляет (если его нет) и удаляет (если он есть) ID с выбранным сообщением в массив выбранных сообщений 
                         setMessageSelected(!messageSelected); //Меняет состояние хука выбранного сообщения, чтобы раюотала стилизация подстветки

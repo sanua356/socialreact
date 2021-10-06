@@ -49,7 +49,7 @@
 }
 .messagesList .opponentMessage p {
   color: white;
-  background: rgb(13, 136, 252);
+  background: #229ef7;
 }
 .messageSender {
   margin-top: 5px;
@@ -62,13 +62,18 @@
 .opponentMessage.messageSender {
   color: white;
 }
+.message {
+  transition: 0.2s ease-in-out;
+}
 .message p {
   position: relative;
   transition: 0.2s ease-in-out;
 }
-.message > div.selectedMessage {
+.message.selectedMessage {
   transition: 0.2s ease-in-out;
-  margin-left: 50px;
+  transform: translateX(50px);
+}
+.message.selectedMessage > p {
   box-shadow: 1px 2px 15px rgb(138, 137, 137);
 }
 .messageInfo {
@@ -92,7 +97,7 @@
 }
 .opponentMessage .messageInfo {
   color: white;
-  background: rgb(13, 136, 252);
+  background: #229ef7;
   border-radius: 0px 20px 20px 20px;
 }
 /* .myMessage .messageInfo:before {

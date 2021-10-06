@@ -8,12 +8,14 @@ import { navbarReducer } from './reducers/navbarReducer';
 import { updatesReducer } from './reducers/updatesReducer';
 import { mainReducer } from './reducers/mainReducer';
 import thunk from "redux-thunk";
+import { webSocketReducer } from './reducers/webSocketReducer';
 
 let reducers = combineReducers({
     manyPages: mainReducer,
     messagesPage: messagesReducer,
     sidebarPage: navbarReducer,
     loginRoomPage :loginroomReducer,
+    webSocket: webSocketReducer
 });
 
 let store = createStore(reducers, applyMiddleware(thunk));

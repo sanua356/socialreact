@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import ReactNotification from 'react-notifications-component';
 import 'react-notifications-component/dist/theme.css';
 import { store } from 'react-notifications-component';
-
+import socket from '../../webSocket/socketConnect';
 
 const notification = { //Дефолтный обьект с оповещением (всплывающее окно) об ошибках для пользователя
     title: "Notification", //Заголовок оповещения
@@ -22,6 +22,7 @@ const notification = { //Дефолтный обьект с оповещение
         onScreen: true //Тоже хз, что но работает с ним красиво
       }
   };
+  
 let MainScreenMsgInputForm = (props) => {//Компонента, которая отображает форму ввода сообщения, кнопки взаимодействия и т.д.
     const [selectedMessagesLength, setSelectedMessagesLength] = useState(props.selectedMessagesLength); //Хук для того, чтобы кнопки взаимодействия
     //Например: изменить или удалить переходили в состояния disabled/enabled в зависимости от того, сколько выбрано сообщений
@@ -40,6 +41,16 @@ let MainScreenMsgInputForm = (props) => {//Компонента, которая 
             props.clearServerMessageAfterView();
         } 
     }, [props.errorServerMessagesNotification])
+
+    useEffect (() => {
+        socket.on("ROOM:SET_USERS", (users) => {
+                props.setUsersList(users);
+            });
+        socket.on("ROOM:NEW_MESSAGE", ({username, text, messageID}) => {
+            console.log(username, text, messageID);
+            props.sendNewMessageWS(props.errors, username, props.roomID, text, messageID, 'opponent');
+            });
+        }, []);
     
     const validationSchema = yup.object().shape({ //Схема валидации для поля ввода сообщений.
         messageTextarea: yup.string().typeError("This field should be string").required("Message field is empty")
@@ -51,8 +62,9 @@ let MainScreenMsgInputForm = (props) => {//Компонента, которая 
                 messageTextarea: '' //Временная переменная хранения данных из поля ввода сообщений
             }}
             onSubmit={(values, resetForm) => { //Функция, срабатывающая при нажатии на кнопку "Send message"
-                props.sendNewMessage(props.errors, props.myUsername, props.roomID, values.messageTextarea, props.usernameSecretKey,  props.messagesListLength, props.errorServerMessagesNotification);
-                resetForm.setFieldValue('messageTextarea', '');
+                props.sendNewMessageDB(props.errors, props.myUsername, props.roomID, values.messageTextarea, 
+                    props.usernameSecretKey, props.messagesListLength, props.errorServerMessagesNotification);
+                    resetForm.setFieldValue('messageTextarea', '');
             }} //Функция отправки API к серверу с новым сообщением и отправка сообщения в UI
             validationSchema = {validationSchema} //Подключение схемы валидации к Формику
             validateOnBlur //Запуск валидации при изменении значения поля

@@ -4,13 +4,15 @@ import Loader from '../CommonComponents/Loader/Loader';
 import MainScreenMsgClear from "./MainScreenMsgClear";
 import { connect } from 'react-redux';
 import { CHANGE_LOADING_STATUS_AC, addNewMessageFromServerTC, DELETE_MESSAGES_FROM_CHAT_AC, deleteMessagesFromServerTC, getMessagesFromServerTC} from '../../redux/reducers/messagesChatReducer';
-import { SELECT_MESSAGE_FROM_CHAT_AC, ADD_ERROR_SERVER_MESSAGE_NOTIFICACTION_AC } from './../../redux/reducers/messagesChatReducer';
+import { SELECT_MESSAGE_FROM_CHAT_AC, ADD_ERROR_SERVER_MESSAGE_NOTIFICACTION_AC, ADD_NEW_MESSAGE_FROM_DATA_BASE_AC } from './../../redux/reducers/messagesChatReducer';
+import { CHANGE_USERS_LIST_AC } from '../../redux/reducers/webSocketReducer';
 
 function MainScreenMessagesLogicComponent(props) {
     //get array messages from file with map
     useEffect(() => {
         if(props.messagesList <= 0){
             props.getMessagesFromServerTC(props.roomID, props.roomIsExists, null, props.myUsername, props.usernameSecretKey);
+            props.webSocketConnect(props.roomID, props.myUsername, props.usernameSecretKey);
         }
     }, []) //get messages from server API 
     return(
@@ -36,13 +38,17 @@ const mapStateToProps = (state) =>{
         messagesListLength: state.messagesPage.messagesList.length,
         errorServerMessagesNotification: state.messagesPage.errorServerMessagesNotification,
         firstMessageID: state.messagesPage.firstMessageID,
-        loadedMessagesArrayLength: state.messagesPage.loadedMessagesArrayLength
+        loadedMessagesArrayLength: state.messagesPage.loadedMessagesArrayLength,
+        usersCount: state.webSocket.users.length
     }
 }
 const mapDispatchToProps = (dispatch) =>{
     return{
-        sendNewMessage: (errors, myUsername, roomID, message, usernameSecretKey) => {
+        sendNewMessageDB: (errors, myUsername, roomID, message, usernameSecretKey) => {
             dispatch(addNewMessageFromServerTC(errors, myUsername, roomID, message, usernameSecretKey));
+        },
+        sendNewMessageWS: (errors, myUsername, roomID, message, usernameSecretKey) => {
+            dispatch(ADD_NEW_MESSAGE_FROM_DATA_BASE_AC(errors, myUsername, roomID, message, usernameSecretKey));
         },
         changeLoadingStatus: (loadingStatus) =>{
             dispatch(CHANGE_LOADING_STATUS_AC(loadingStatus));
@@ -59,7 +65,10 @@ const mapDispatchToProps = (dispatch) =>{
         },
         loadMoreMessages: (roomID, roomIsExists, myUsername, firstMessageID, usernameSecretKey) => {
             dispatch(getMessagesFromServerTC(roomID, roomIsExists, myUsername, firstMessageID, usernameSecretKey));
-        }
+        },
+        setUsersList: (usersList) =>{
+             dispatch(CHANGE_USERS_LIST_AC(usersList));
+         }
     }
 }
 const MainScreenMsgClearComponent = connect(mapStateToProps, mapDispatchToProps)(MainScreenMsgClear);

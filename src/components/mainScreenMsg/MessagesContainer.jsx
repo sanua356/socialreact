@@ -2,6 +2,7 @@ import React from 'react';
 import MainScreenMessagesLogicFunctions from "./MainScreenMessagesLogicFunctions";
 import { connect } from 'react-redux';
 import { getMessagesFromServerTC } from '../../redux/reducers/messagesChatReducer';
+import { webSocketConnectTC } from '../../redux/reducers/webSocketReducer';
 
 const mapStateToProps = (state) =>{
     return{
@@ -11,7 +12,8 @@ const mapStateToProps = (state) =>{
         isLoading: state.messagesPage.isLoading,
         roomIsExists: state.manyPages.roomIsExists,
         errors: state.messagesPage.errors,
-        messagesList: state.messagesPage.messagesList
+        messagesList: state.messagesPage.messagesList,
+        webSocketConnected: state.webSocket.connectingStatus,
     }
 }
 const mapDispatchToProps = (dispatch) =>{
@@ -19,6 +21,9 @@ const mapDispatchToProps = (dispatch) =>{
         getMessagesFromServerTC: (roomID, roomIsExists, myUsername, firstMessageID, usernameSecretKey) =>{
             dispatch(getMessagesFromServerTC(roomID, roomIsExists, firstMessageID, myUsername, usernameSecretKey));   
         },
+        webSocketConnect: (roomID, myUsername, usernameSecretKey) => {
+            dispatch(webSocketConnectTC(roomID, myUsername, usernameSecretKey));
+        }
     }
 }
 

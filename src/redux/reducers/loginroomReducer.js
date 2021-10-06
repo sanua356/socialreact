@@ -1,3 +1,4 @@
+import * as axios from "axios";
 import { loginAPI } from "../../APIrequests/api"; //Импорт обьекта с асинхронщиной к серверу для страницы логина
 import { CHANGE_ROOM_EXISTS_STATUS_AC } from "../reducers/mainReducer"; //Импорт Action Creater для проверки существования комнаты при логине
 const actionsNames = {

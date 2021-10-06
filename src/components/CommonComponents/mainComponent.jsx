@@ -6,6 +6,7 @@ import Navbar from '../navbar/Navbar';
 import MessagesContainer from '../MainScreenMsg/MessagesContainer';
 import Loader from '../CommonComponents/Loader/Loader';
 import Error404 from '../404/Error404';
+// import socketConnect from '../../webSocket/socketConnect'
 const Profile = React.lazy(() => import('../profile/Profile'));
 const Updates = React.lazy(() => import('../updates/Updates'));
 const Logout = React.lazy(() => import('../Logout/Logout'));
