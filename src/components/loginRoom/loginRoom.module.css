@@ -34,7 +34,11 @@
   overflow: hidden;
   border-radius: 20px;
 }
-
+@media screen and (max-width: 480px) {
+  .loginroomBlock{
+  width: auto;
+  }
+}
 .positionForm {
   height: 100%;
   display: flex;

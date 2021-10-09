@@ -88,7 +88,7 @@ const MessagesChatPage = React.memo((props) => { //Компонента, кот�
     return (
         <>
         {props.messagesEmptyStatus 
-        ? <span className = {MainScrMsgStyle.errors}>No saved messages from room.</span> 
+        ? <div className={MainScrMsgStyle.notification}><span className = {MainScrMsgStyle.errors}>No saved messages from room.</span></div> 
         : <div className={MainScrMsgStyle.messagesList} ref ={chatScreen}>
             {props.loadedMessagesArrayLength >= 10 ? <button 
             type = "button" 

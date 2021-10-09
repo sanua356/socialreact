@@ -31,7 +31,10 @@
   align-items: center;
   margin: 10px 0px;
 }
-
+.notification{
+  margin-bottom: 40%;
+  margin-top: 30px;
+}
 .messagesList p {
   word-break: break-all;
   cursor: pointer;
