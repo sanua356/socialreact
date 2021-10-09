@@ -43,6 +43,11 @@ input {
 .container > div {
   height: 700px;
 }
+@media screen and (max-width: 480px) {
+  .container > div {
+    height: auto;
+  }
+}
 li {
   list-style-type: none;
 }

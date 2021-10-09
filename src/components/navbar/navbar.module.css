@@ -7,12 +7,37 @@
 }
 @media screen and (max-width: 480px) {
   .navbar {
-    display: none;
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}
+.navbarSiteTitle {
+  text-align: center;
+  font-weight: 100;
+}
+@media screen and (max-width: 480px) {
+  .navbar h2{
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    font-weight: 900;
   }
 }
 ul {
   padding: 0;
   margin: 0;
+}
+@media screen and (max-width: 480px) {
+  ul{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+@media screen and (max-width: 480px) {
+  .menuItemName{
+    display: none;
+  }
 }
 .menuItemStyle {
   transition: 0.2s ease-in-out;
@@ -31,9 +56,21 @@ ul {
   color: rgb(255, 72, 0);
   border-left: 4px solid rgb(255, 72, 0);
 }
+@media screen and (max-width: 480px) {
+  .menuItemStyle:hover{
+    border-left: none;
+    border-bottom: 4px solid rgb(255, 72, 0);
+  }
+}
 .activeLink li {
   color: rgb(0, 183, 255);
   border-left: 4px solid rgb(0, 183, 255);
+}
+@media screen and (max-width: 480px) {
+  .activeLink li{
+    border-left: none;
+    border-bottom: 4px solid rgb(0, 183, 255);
+  }
 }
 .menuItemIcon {
   margin-right: 20px;
@@ -42,6 +79,11 @@ ul {
   margin: 0 auto;
   margin-top: 5vh;
   margin-bottom: 10vh;
+}
+@media screen and (max-width: 480px) {
+  .userBlock {
+    display: none;
+  }
 }
 .userBlock img {
   display: block;
