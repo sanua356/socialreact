@@ -42,12 +42,11 @@ let MainScreenMsgInputForm = (props) => {//Компонента, которая 
         } 
     }, [props.errorServerMessagesNotification])
 
-    useEffect (() => {
+    useEffect (() => {  
         socket.on("ROOM:SET_USERS", (users) => {
                 props.setUsersList(users);
             });
         socket.on("ROOM:NEW_MESSAGE", ({username, text, messageID}) => {
-            console.log(username, text, messageID);
             props.sendNewMessageWS(props.errors, username, props.roomID, text, messageID, 'opponent');
             });
         }, []);

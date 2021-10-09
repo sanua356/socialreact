@@ -10,6 +10,11 @@
   justify-content: center;
   height: 100%;
 }
+@media screen and (max-width: 480px) {
+  .chatBlock{
+    min-height: 100%;
+  }
+}
 .chatBlock hr {
   width: 100%;
   color: black;

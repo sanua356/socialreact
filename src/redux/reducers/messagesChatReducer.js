@@ -85,12 +85,7 @@ export function ADD_ERROR_SERVER_MESSAGE_NOTIFICACTION_AC(
     errorServerMessagesNotification,
   };
 }
-export function SET_USERS_COUNT_AC(usersCount) {
-  return {
-    type: "SET_USERS_COUNT",
-    usersCount,
-  };
-}
+
 const initialState = {
   messagesList: [], //Массив списка сообщений, полученных с сервера для вывода в UI
   messagesEmptyStatusRoom: false, //Переменная, которая ставится в true, если с сервера пришла пустая комната без сообщений
@@ -100,7 +95,7 @@ const initialState = {
   errorServerMessagesNotification: "",
   firstMessageID: null, //Переменная, в которой хранится ID первого загруженного сообщения (самого старого с сервера). Это нужно для дозагрузки сообщений с сервера относительно старого ID.
   loadedMessagesArrayLength: 0, //Переменная, в которой хранится длина массива дозагруженных сообщений с сервера (нужна для скрытия/отображения кнопкп load more messages)
-  usersCount: 0,
+  lastMessageID: -1, //ID последнего полученного сообщения
 };
 
 export const messagesReducer = (state = initialState, action) => {
@@ -109,7 +104,7 @@ export const messagesReducer = (state = initialState, action) => {
     case actionsNames.ADD_NEW_MESSAGE_FROM_DATA_BASE: //Если АС = отправка сообщения к БД
       stateCopy = { ...state, messagesList: [...state.messagesList] };
       //Если нет ошибок ввода
-      if (action.message) {
+      if (action.message && stateCopy.lastMessageID != action.messageID) {
         let messageOwnership = "opponent";
         if (action.messageOwner === "me") {
           messageOwnership = "me";
@@ -125,6 +120,7 @@ export const messagesReducer = (state = initialState, action) => {
           messageOwnership: messageOwnership,
         };
         stateCopy.messagesList.push(newMessage); //push в массив сообщений
+        stateCopy.lastMessageID = action.messageID;
         console.log("Message sended");
         stateCopy.messagesEmptyStatusRoom = false;
         console.log(stateCopy.messagesList);
@@ -203,11 +199,6 @@ export const messagesReducer = (state = initialState, action) => {
         action.errorServerMessagesNotification;
       console.log(stateCopy);
       return stateCopy;
-    case actionsNames.SET_USERS_COUNT:
-      return {
-        ...state,
-        usersCount: action.usersCount,
-      };
     default:
       return state;
   }

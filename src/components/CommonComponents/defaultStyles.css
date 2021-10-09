@@ -35,6 +35,11 @@ input {
   align-items: center;
   justify-content: space-between;
 }
+@media screen and (max-width: 480px) {
+  .container {
+    width: 100%;
+  }
+}
 .container > div {
   height: 700px;
 }
@@ -51,4 +56,10 @@ a {
   padding: 30px;
   padding-top: 15px;
   box-shadow: 1px 2px 15px rgba(0, 0, 0, 0.3);
+}
+@media screen and (max-width: 480px) {
+  .workspace {
+    width: 100%;
+    padding: 15px 0px;
+  }
 }

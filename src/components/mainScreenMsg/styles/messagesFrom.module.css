@@ -19,6 +19,11 @@
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
   height: auto;
 }
+@media screen and (max-width: 480px) {
+  .controlsBtns textarea {
+    width: 80%;
+  }
+}
 .controlsBtns textarea:focus {
   box-shadow: 1px 3px 15px rgba(0, 0, 0, 0.2);
 }
@@ -81,6 +86,13 @@ button[enabled] {
   font-family: "Nunito", sans-serif;
   font-weight: 800;
   margin-right: 30px;
+}
+@media screen and (max-width: 480px) {
+  .changeSendedMessageControlsBtns {
+    margin-right: 15px;
+    font-size: 12px;
+    padding: 10px 20px;
+  }
 }
 .changeSendedMessageControlsBtns svg {
   margin-right: 5px;
