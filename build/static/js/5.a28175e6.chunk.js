@@ -1,0 +1,2 @@
+(this.webpackJsonpsocialreact=this.webpackJsonpsocialreact||[]).push([[5],{313:function(e,a,t){"use strict";t.r(a);var c=t(0),n=t.n(c),r=t(84);a.default=function(e){return n.a.createElement("div",{className:"workspace"},n.a.createElement(r.a,{headerTitle:"Updates",headerDescription:"Application updates changelog"}),n.a.createElement("h1",{style:{color:"black",textAlign:"center"}},"UPDATES PAGE (IN DEVELOPMENT)"))}}}]);
+//# sourceMappingURL=5.a28175e6.chunk.js.map

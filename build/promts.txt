@@ -1,0 +1,6 @@
+AC - Action Creater
+TC - Thunk Creater
+API - Обращение к серверу
+UI - Все компоненты с DOM
+BLL - Buisness Logic Layer (Там хранится state)
+DAL - Data Access Layer (Там все запросы к серверу для получения данных)

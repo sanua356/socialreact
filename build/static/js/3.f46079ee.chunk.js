@@ -1,0 +1,2 @@
+(this.webpackJsonpsocialreact=this.webpackJsonpsocialreact||[]).push([[3],{314:function(e,a,n){"use strict";n.r(a);var o=n(0),t=n.n(o),c=n(4);a.default=function(e){return console.log("Component clear LC rendered"),localStorage.clear(),t.a.createElement(t.a.Fragment,null,t.a.createElement(c.a,{to:"/login"}),window.location.reload())}}}]);
+//# sourceMappingURL=3.f46079ee.chunk.js.map
