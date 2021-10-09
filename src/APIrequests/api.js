@@ -10,7 +10,7 @@ export const messagesAPI = {
   ) => {
     if (roomID && userSenderMessage && message) {
       return axios.post(
-        `http://socialreactapi/addnewmessage.php?roomid=${roomID}`,
+        `http://80.78.244.144:3000/addnewmessage.php?roomid=${roomID}`,
         {
           userSenderMessage: userSenderMessage,
           message: message,
@@ -27,18 +27,18 @@ export const messagesAPI = {
   ) => {
     if (firstMessageID === null) {
       return await axios.get(
-        `http://socialreactapi/roomsgetmessages.php?roomid=${roomID}&username=${myUsername}&usernamesecretkey=${usernameSecretKey}`
+        `http://80.78.244.144:3000/roomsgetmessages.php?roomid=${roomID}&username=${myUsername}&usernamesecretkey=${usernameSecretKey}`
       );
     } else {
       return await axios.get(
-        `http://socialreactapi/roomsgetmessages.php?roomid=${roomID}&firstmessageid=${firstMessageID}&username=${myUsername}&usernamesecretkey=${usernameSecretKey}`
+        `http://80.78.244.144:3000/roomsgetmessages.php?roomid=${roomID}&firstmessageid=${firstMessageID}&username=${myUsername}&usernamesecretkey=${usernameSecretKey}`
       );
     }
   },
   deleteMessages: async (roomID, messagesID) => {
     console.log(roomID, messagesID);
     return await axios.delete(
-      `http://socialreactapi/deletemessages.php?roomid=${roomID}`,
+      `http://80.78.244.144:3000/deletemessages.php?roomid=${roomID}`,
       {
         data: {
           messagesID,
@@ -52,13 +52,13 @@ export const loginAPI = {
   checkRoomExists: async () => {
     const roomID = localStorage.getItem("roomID");
     return await axios.get(
-      `http://socialreactapi/roomsexists.php?roomid=${roomID}`
+      `http://80.78.244.144:3000/roomsexists.php?roomid=${roomID}`
     );
   },
   createNewRoom: async () => {
     const roomID = localStorage.getItem("roomID");
     return await axios.get(
-      `http://socialreactapi/createnewroom.php?roomid=${roomID}`
+      `http://80.78.244.144:3000/createnewroom.php?roomid=${roomID}`
     );
   },
   webSocketConnect: (roomID, username, usernameSecretKey) => {
