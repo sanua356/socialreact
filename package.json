@@ -25,8 +25,8 @@
     "web-vitals": "^1.1.2",
     "yup": "^0.32.9"
   },
-  "homepage" : "http://80.78.244.144:3000/login",
-  "proxy": "http://80.78.244.144:8080/",
+  "homepage" : "http://80.78.244.144:3000",
+  "proxy": "http://80.78.244.144:8080",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
