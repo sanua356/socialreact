@@ -90,7 +90,7 @@ export const loginroomReducer = (state = initialState, action) => {
       return stateCopy;
     case actionsNames.CHANGE_ROOM_IS_EXISIS_SERVER_RESPONSE:
       stateCopy = { ...state };
-      if (action.messageServerData == null) {
+      if (action.messageServerData === null) {
         stateCopy.roomIsExistsServerResponse = null;
       } else {
         stateCopy.roomIsExistsServerResponse = action.messageServerData;

@@ -104,7 +104,7 @@ export const messagesReducer = (state = initialState, action) => {
     case actionsNames.ADD_NEW_MESSAGE_FROM_DATA_BASE: //Если АС = отправка сообщения к БД
       stateCopy = { ...state, messagesList: [...state.messagesList] };
       //Если нет ошибок ввода
-      if (action.message && stateCopy.lastMessageID != action.messageID) {
+      if (action.message && stateCopy.lastMessageID !== action.messageID) {
         let messageOwnership = "opponent";
         if (action.messageOwner === "me") {
           messageOwnership = "me";
@@ -180,7 +180,7 @@ export const messagesReducer = (state = initialState, action) => {
       const checkExistsMessage = stateCopy.seletctedMessages.indexOf(
         action.messageID
       );
-      if (checkExistsMessage == -1) {
+      if (checkExistsMessage === -1) {
         stateCopy.seletctedMessages.push(action.messageID);
       } else {
         stateCopy.seletctedMessages.splice(checkExistsMessage, 1);

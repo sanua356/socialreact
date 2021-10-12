@@ -67,6 +67,6 @@ export const loginAPI = {
       username: username,
       usernameSecretKey: hash.MD5(usernameSecretKey),
     };
-    return axios.post("http://127.0.0.1:8080/rooms", payload);
+    return axios.post("http://localhost:3000/rooms", payload);
   },
 };
