@@ -41,7 +41,7 @@ export const webSocketConnectTC = (roomID, username, usernameSecretKey) => {
           };
           socket.emit("ROOM:JOIN", data);
           axios
-            .get(`http://80.78.244.144:8080/rooms/${roomID}`)
+            .get(`rooms/${roomID}`)
             .then((response) => {
               dispatch(CHANGE_USERS_LIST_AC(response.data.users));
             })

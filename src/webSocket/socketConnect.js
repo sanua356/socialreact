@@ -1,5 +1,5 @@
 import io from "socket.io-client";
 
-const socket = io.connect("http://80.78.244.144:8080/", { reconnect: true });
+const socket = io.connect({ reconnect: true });
 
 export default socket;

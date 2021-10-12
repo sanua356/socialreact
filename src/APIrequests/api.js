@@ -10,7 +10,7 @@ export const messagesAPI = {
   ) => {
     if (roomID && userSenderMessage && message) {
       return axios.post(
-        `http://alp-srv.ru/addnewmessage.php?roomid=${roomID}`,
+        `http://socialreactapi/addnewmessage.php?roomid=${roomID}`,
         {
           userSenderMessage: userSenderMessage,
           message: message,
@@ -27,18 +27,18 @@ export const messagesAPI = {
   ) => {
     if (firstMessageID === null) {
       return await axios.get(
-        `http://alp-srv.ru/roomsgetmessages.php?roomid=${roomID}&username=${myUsername}&usernamesecretkey=${usernameSecretKey}`
+        `http://socialreactapi/roomsgetmessages.php?roomid=${roomID}&username=${myUsername}&usernamesecretkey=${usernameSecretKey}`
       );
     } else {
       return await axios.get(
-        `http://alp-srv.ru/roomsgetmessages.php?roomid=${roomID}&firstmessageid=${firstMessageID}&username=${myUsername}&usernamesecretkey=${usernameSecretKey}`
+        `http://socialreactapi/roomsgetmessages.php?roomid=${roomID}&firstmessageid=${firstMessageID}&username=${myUsername}&usernamesecretkey=${usernameSecretKey}`
       );
     }
   },
   deleteMessages: async (roomID, messagesID) => {
     console.log(roomID, messagesID);
     return await axios.delete(
-      `http://alp-srv.ru/deletemessages.php?roomid=${roomID}`,
+      `http://socialreactapi/deletemessages.php?roomid=${roomID}`,
       {
         data: {
           messagesID,
@@ -52,13 +52,13 @@ export const loginAPI = {
   checkRoomExists: async () => {
     const roomID = localStorage.getItem("roomID");
     return await axios.get(
-      `http://alp-srv.ru/roomsexists.php?roomid=${roomID}`
+      `http://socialreactapi/roomsexists.php?roomid=${roomID}`
     );
   },
   createNewRoom: async () => {
     const roomID = localStorage.getItem("roomID");
     return await axios.get(
-      `http://alp-srv.ru/createnewroom.php?roomid=${roomID}`
+      `http://socialreactapi/createnewroom.php?roomid=${roomID}`
     );
   },
   webSocketConnect: (roomID, username, usernameSecretKey) => {
@@ -67,6 +67,6 @@ export const loginAPI = {
       username: username,
       usernameSecretKey: hash.MD5(usernameSecretKey),
     };
-    return axios.post("http://80.78.244.144:8080/rooms", payload);
+    return axios.post("http://127.0.0.1:8080/rooms", payload);
   },
 };
